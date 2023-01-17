@@ -41,24 +41,30 @@ class SheetReader {
 	/**
 	 * Iterates over each value row under a section.
 	 */
-	void eachRawRow(Section section, Consumer<Row> fn) {
+	private void eachRawRow(Section section, Consumer<Row> fn) {
 		if (section == null || fn == null)
 			return;
+		Row start = null;
 		var iter = sheet.rowIterator();
-		boolean inSection = false;
 		while (iter.hasNext()) {
 			var row = iter.next();
-			var firstVal = In.stringOf(row, 0);
-			if (!inSection) {
-				if (matches(firstVal, section)) {
-					inSection = true;
-				}
-				continue;
+			var head = In.stringOf(row, 0);
+			if (matches(head, section)) {
+				start = row;
+				break;
 			}
-			// in section
-			if (Strings.nullOrEmpty(firstVal))
+		}
+		if (start == null)
+			return;
+
+		int i = start.getRowNum() + 1;
+		Row row;
+		while ((row = sheet.getRow(i)) != null) {
+			var head = In.stringOf(row, 0);
+			if (Strings.nullOrEmpty(head))
 				break;
 			fn.accept(row);
+			i++;
 		}
 	}
 
