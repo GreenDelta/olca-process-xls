@@ -4,7 +4,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.openlca.core.database.IDatabase;
 import org.openlca.core.io.ImportLog;
+import org.openlca.core.model.ModelType;
 import org.openlca.core.model.Process;
+import org.openlca.core.model.ProcessDocumentation;
 import org.openlca.core.model.Version;
 import org.openlca.core.model.descriptors.ProcessDescriptor;
 import org.openlca.jsonld.input.UpdateMode;
@@ -61,6 +63,12 @@ public class XlsProcessReader {
 			process.version = info.version;
 			process.name = info.name;
 			process.lastChange = info.lastChange;
+			if (process.documentation == null) {
+				process.documentation = new ProcessDocumentation();
+			}
+
+			// sync sheets
+			syncGeneralInfo(wb, process);
 
 			var synced = process.id == 0
 				? db.insert(process)
@@ -99,6 +107,56 @@ public class XlsProcessReader {
 			? lastChange.getTime()
 			: 0;
 		return d;
+	}
+
+	private void syncGeneralInfo(Workbook wb, Process process) {
+		var sheet = getSheet(wb, Tab.GENERAL_INFO);
+		if (sheet == null)
+			return;
+
+		var info = sheet.read(Section.GENERAL_INFO);
+		if (info != null) {
+			process.category = info.syncCategory(db, ModelType.PROCESS);
+			process.description = info.str(Field.DESCRIPTION);
+			process.tags = info.str(Field.TAGS);
+		} else {
+			process.category = null;
+			process.description = null;
+			process.tags = null;
+		}
+
+		var doc = process.documentation;
+
+		var time = sheet.read(Section.TIME);
+		if (time != null) {
+			doc.validFrom = info.date(Field.VALID_FROM);
+			doc.validUntil = info.date(Field.VALID_UNTIL);
+			doc.time = info.str(Field.DESCRIPTION);
+		} else {
+			doc.validFrom = null;
+			doc.validUntil = null;
+			doc.time = null;
+		}
+
+		var geo = sheet.read(Section.GEOGRAPHY);
+		if (geo != null) {
+			// TODO location
+			doc.geography = geo.str(Field.DESCRIPTION);
+		} else {
+			process.location = null;
+			doc.geography = null;
+		}
+
+		var dqs = sheet.read(Section.DATA_QUALITY);
+		if (dqs != null) {
+			// TODO data quality schemes
+			process.dqEntry = dqs.str(Field.DATA_QUALITY_ENTRY);
+		} else {
+			process.dqSystem = null;
+			process.dqEntry = null;
+			process.exchangeDqSystem = null;
+			process.socialDqSystem = null;
+		}
 	}
 
 	private SheetReader getSheet(Workbook wb, Tab tab) {
