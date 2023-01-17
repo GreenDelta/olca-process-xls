@@ -4,6 +4,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.openlca.core.database.IDatabase;
 import org.openlca.core.io.ImportLog;
+import org.openlca.core.model.DQSystem;
+import org.openlca.core.model.Location;
 import org.openlca.core.model.ModelType;
 import org.openlca.core.model.Process;
 import org.openlca.core.model.ProcessDocumentation;
@@ -68,7 +70,10 @@ public class XlsProcessReader {
 			}
 
 			// sync sheets
-			syncGeneralInfo(wb, process);
+			var config = new ReaderConfig(
+				this, wb, process, new EntityIndex(db, log), db);
+			syncRefData(config);
+			syncGeneralInfo(config);
 
 			var synced = process.id == 0
 				? db.insert(process)
@@ -91,10 +96,11 @@ public class XlsProcessReader {
 	}
 
 	private ProcessDescriptor readInfo(Workbook wb) {
-		var sheet = getSheet(wb, Tab.GENERAL_INFO);
+		var sheet = wb.getSheet(Tab.GENERAL_INFO.label());
 		if (sheet == null)
 			return null;
-		var info = sheet.read(Section.GENERAL_INFO);
+		var reader = new SheetReader(sheet);
+		var info = reader.read(Section.GENERAL_INFO);
 		var refId = info.str(Field.UUID);
 		if (Strings.nullOrEmpty(refId))
 			return null;
@@ -109,10 +115,17 @@ public class XlsProcessReader {
 		return d;
 	}
 
-	private void syncGeneralInfo(Workbook wb, Process process) {
-		var sheet = getSheet(wb, Tab.GENERAL_INFO);
+	private EntityIndex syncRefData(ReaderConfig config) {
+		var index = new EntityIndex(db, log);
+		LocationReader.sync(config);
+		return index;
+	}
+
+	private void syncGeneralInfo(ReaderConfig config) {
+		var sheet = config.getSheet(Tab.GENERAL_INFO);
 		if (sheet == null)
 			return;
+		var process = config.process;
 
 		var info = sheet.read(Section.GENERAL_INFO);
 		if (info != null) {
@@ -140,7 +153,7 @@ public class XlsProcessReader {
 
 		var geo = sheet.read(Section.GEOGRAPHY);
 		if (geo != null) {
-			// TODO location
+			process.location = geo.get(Field.LOCATION, config, Location.class);
 			doc.geography = geo.str(Field.DESCRIPTION);
 		} else {
 			process.location = null;
@@ -149,7 +162,12 @@ public class XlsProcessReader {
 
 		var dqs = sheet.read(Section.DATA_QUALITY);
 		if (dqs != null) {
-			// TODO data quality schemes
+			process.dqSystem = dqs.get(
+				Field.PROCESS_SCHEMA, config, DQSystem.class);
+			process.exchangeDqSystem = dqs.get(
+				Field.FLOW_SCHEMA, config, DQSystem.class);
+			process.socialDqSystem = dqs.get(
+				Field.SOCIAL_SCHEMA, config, DQSystem.class);
 			process.dqEntry = dqs.str(Field.DATA_QUALITY_ENTRY);
 		} else {
 			process.dqSystem = null;
@@ -159,10 +177,19 @@ public class XlsProcessReader {
 		}
 	}
 
-	private SheetReader getSheet(Workbook wb, Tab tab) {
-		var sheet = wb.getSheet(tab.label());
-		return sheet != null
-			? new SheetReader(sheet)
-			: null;
+
+	record ReaderConfig(
+		XlsProcessReader reader,
+		Workbook wb,
+		Process process,
+		EntityIndex index,
+		IDatabase db) {
+
+		SheetReader getSheet(Tab tab) {
+			var sheet = wb.getSheet(tab.label());
+			return sheet != null
+				? new SheetReader(sheet)
+				: null;
+		}
 	}
 }

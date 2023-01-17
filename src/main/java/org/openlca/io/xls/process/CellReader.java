@@ -5,6 +5,8 @@ import org.openlca.core.database.CategoryDao;
 import org.openlca.core.database.IDatabase;
 import org.openlca.core.model.Category;
 import org.openlca.core.model.ModelType;
+import org.openlca.core.model.RootEntity;
+import org.openlca.io.xls.process.XlsProcessReader.ReaderConfig;
 import org.openlca.util.Strings;
 
 import java.util.Date;
@@ -19,8 +21,20 @@ interface CellReader {
 		return In.dateOf(cellOf(field));
 	}
 
+	default double num(Field field) {
+		return In.doubleOf(cellOf(field));
+	}
+
 	default boolean bool(Field field) {
 		return In.booleanOf(cellOf(field));
+	}
+
+	default <T extends RootEntity> T get(
+		Field field, ReaderConfig config, Class<T> type) {
+		var name = str(field);
+		if (Strings.nullOrEmpty(name))
+			return null;
+		return config.index().get(type, name);
 	}
 
 	default Category syncCategory(IDatabase db, ModelType type) {

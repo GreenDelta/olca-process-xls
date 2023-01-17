@@ -49,7 +49,7 @@ public class BaseTest {
 		synced = XlsProcessReader.of(db)
 			.sync(file.toFile())
 			.orElseThrow();
-		Files.delete(file);
+		// Files.delete(file);
 	}
 
 	@After

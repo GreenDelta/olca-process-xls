@@ -5,7 +5,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.openlca.util.Strings;
 
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 class SheetReader {
@@ -32,7 +31,7 @@ class SheetReader {
 	 */
 	SectionReader read(Section section) {
 		var fields = new FieldMap();
-		eachRow(section, row -> {
+		eachRawRow(section, row -> {
 			var field = In.stringOf(row, 0);
 			fields.put(field, row.getRowNum());
 		});
@@ -42,7 +41,7 @@ class SheetReader {
 	/**
 	 * Iterates over each value row under a section.
 	 */
-	void eachRow(Section section, Consumer<Row> fn) {
+	void eachRawRow(Section section, Consumer<Row> fn) {
 		if (section == null || fn == null)
 			return;
 		var iter = sheet.rowIterator();
@@ -63,15 +62,15 @@ class SheetReader {
 		}
 	}
 
-	void eachRow(Section section, BiConsumer<Row, FieldMap> fn) {
+	void eachRow(Section section, Consumer<RowReader> fn) {
 		var fieldsRef = new AtomicReference<FieldMap>();
-		eachRow(section, row -> {
+		eachRawRow(section, row -> {
 			var fields = fieldsRef.get();
 			if (fields == null) {
 				fields = FieldMap.of(row);
 				fieldsRef.set(fields);
 			} else {
-				fn.accept(row, fields);
+				fn.accept(RowReader.of(row, fields));
 			}
 		});
 	}

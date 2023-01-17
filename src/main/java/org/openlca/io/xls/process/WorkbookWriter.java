@@ -31,6 +31,9 @@ class WorkbookWriter {
 
 	void write() {
 		writeInfoSheet();
+		for (var sheet : entitySheets) {
+			sheet.flush();
+		}
 	}
 
 	Styles styles() {
