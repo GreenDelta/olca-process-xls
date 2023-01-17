@@ -7,6 +7,7 @@ import org.openlca.core.io.ImportLog;
 import org.openlca.core.model.Process;
 import org.openlca.core.model.Version;
 import org.openlca.core.model.descriptors.ProcessDescriptor;
+import org.openlca.jsonld.input.UpdateMode;
 import org.openlca.util.Strings;
 
 import java.io.File;
@@ -18,23 +19,29 @@ public class XlsProcessReader {
 
 	private final IDatabase db;
 	private final ImportLog log;
-	private boolean skipUpdates;
+	private UpdateMode updates = UpdateMode.NEVER;
 
-	public XlsProcessReader(IDatabase db) {
+	private XlsProcessReader(IDatabase db) {
 		this.db = Objects.requireNonNull(db);
 		this.log = new ImportLog();
+	}
+
+	public static XlsProcessReader of(IDatabase db) {
+		return new XlsProcessReader(db);
 	}
 
 	public ImportLog log() {
 		return log;
 	}
 
-	public XlsProcessReader skipUpdates(boolean b) {
-		this.skipUpdates = b;
+	public XlsProcessReader withUpdates(UpdateMode mode) {
+		if (mode != null) {
+			this.updates = mode;
+		}
 		return this;
 	}
 
-	public Optional<Process> sync(File file) throws IOException {
+	public Optional<Process> sync(File file) {
 		try (var wb = WorkbookFactory.create(file)) {
 			var info = readInfo(wb);
 			if (info == null) {
@@ -43,12 +50,36 @@ public class XlsProcessReader {
 			}
 			var process = db.get(Process.class, info.refId);
 			if (process != null) {
-				if (skipUpdates)
+				if (skipUpdate(process, info))
 					return Optional.of(process);
 			} else {
 				process = new Process();
 			}
+
+			// update info fields
+			process.refId = info.refId;
+			process.version = info.version;
+			process.name = info.name;
+			process.lastChange = info.lastChange;
+
+			var synced = process.id == 0
+				? db.insert(process)
+				: db.update(process);
+			return Optional.of(synced);
+		} catch (IOException e) {
+			throw new RuntimeException(
+				"failed to read process from file: " + file);
 		}
+	}
+
+	private boolean skipUpdate(Process current, ProcessDescriptor next) {
+		return switch (updates) {
+			case NEVER -> true;
+			case ALWAYS -> false;
+			case IF_NEWER -> current.version != next.version
+				? current.version >= next.version
+				: current.lastChange >= next.lastChange;
+		};
 	}
 
 	private ProcessDescriptor readInfo(Workbook wb) {

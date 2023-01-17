@@ -13,11 +13,15 @@ public class XlsProcessWriter {
 
 	private final EntityStore db;
 
-	public XlsProcessWriter(EntityStore db) {
+	private XlsProcessWriter(EntityStore db) {
 		this.db = db;
 	}
 
-	public void write(ProcessDescriptor d, File file) throws IOException {
+	public static XlsProcessWriter of(EntityStore db) {
+		return new XlsProcessWriter(db);
+	}
+
+	public void write(ProcessDescriptor d, File file) {
 		if (d == null || file == null)
 			return;
 		var process = db.get(Process.class, d.id);
@@ -26,7 +30,7 @@ public class XlsProcessWriter {
 		write(process, file);
 	}
 
-	public void write(Process process, File file) throws IOException {
+	public void write(Process process, File file) {
 		if (process == null || file == null)
 			return;
 		try (var wb = new XSSFWorkbook();
@@ -34,6 +38,9 @@ public class XlsProcessWriter {
 			var writer = new WorkbookWriter(wb, db, process);
 			writer.write();
 			wb.write(out);
+		} catch (IOException e) {
+			throw new RuntimeException(
+				"failed to write process " + process + " to file " + file, e);
 		}
 	}
 }
