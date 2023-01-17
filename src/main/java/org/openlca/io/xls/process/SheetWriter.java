@@ -3,6 +3,7 @@ package org.openlca.io.xls.process;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.openlca.core.model.RootEntity;
 
 import java.util.Date;
 
@@ -10,34 +11,55 @@ class SheetWriter {
 
 	private final Sheet sheet;
 	private final Styles styles;
+	private final WorkbookWriter wb;
 
 	private int cursor;
 
-	SheetWriter(Sheet sheet, Styles styles) {
-		this.sheet = sheet;
-		this.styles = styles;
+	SheetWriter(Tab tab, WorkbookWriter wb) {
+		this.wb = wb;
+		this.sheet = wb.wb.createSheet(tab.label());
+		this.styles = wb.styles;
 	}
 
-	SheetWriter header(String header) {
-		cell(cursor, 0, header).setCellStyle(styles.bold());
+	SheetWriter next(Section section) {
+		cell(cursor, 0, section.header()).setCellStyle(styles.bold());
 		cursor++;
 		return this;
 	}
 
-	SheetWriter next(String header, String value) {
-		cell(cursor, 0, header).setCellStyle(styles.pairLabel());
+	SheetWriter next(Field field, String value) {
+		cell(cursor, 0, field.label()).setCellStyle(styles.pairLabel());
 		cell(cursor, 1, value).setCellStyle(styles.pairValue());
 		cursor++;
 		return this;
 	}
 
-	SheetWriter next(String header, Date date) {
-		cell(cursor, 0, header).setCellStyle(styles.pairLabel());
+	SheetWriter next(Field field, Date date) {
+		cell(cursor, 0, field.label()).setCellStyle(styles.pairLabel());
 		if (date != null) {
 			var c = cell(cursor, 1);
 			c.setCellValue(date);
 			c.setCellStyle(styles.date());
 		}
+		cursor++;
+		return this;
+	}
+
+	SheetWriter next(Field field, RootEntity e) {
+		cell(cursor, 0, field.label()).setCellStyle(styles.pairLabel());
+		if (e != null) {
+			wb.visit(e);
+			cell(cursor, 1, e.name).setCellStyle(styles.pairValue());
+		}
+		cursor++;
+		return this;
+	}
+
+	SheetWriter next(RootEntity e) {
+		if (e == null)
+			return this;
+		wb.visit(e);
+		cell(cursor, 0, e.name);
 		cursor++;
 		return this;
 	}

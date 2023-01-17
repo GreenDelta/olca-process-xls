@@ -31,7 +31,7 @@ public class XlsProcessWriter {
 			return;
 		try (var wb = new XSSFWorkbook();
 				 var out = new FileOutputStream(file)) {
-			var writer = new WbWriter(wb, db, process);
+			var writer = new WorkbookWriter(wb, db, process);
 			writer.write();
 			wb.write(out);
 		}
