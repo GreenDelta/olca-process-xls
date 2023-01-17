@@ -7,29 +7,34 @@ import org.openlca.core.model.RootEntity;
 import org.openlca.core.model.Version;
 import org.openlca.core.model.store.EntityStore;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 class WorkbookWriter {
 
-	final Workbook wb;
-	final Styles styles;
+	private final Workbook wb;
+	private final Styles styles;
 
 	private final EntityStore db;
 	private final Process process;
-	private final List<EntitySheetWriter> entitySheets;
+	private final List<EntityWriter> entitySheets;
 
 	WorkbookWriter(Workbook wb, EntityStore db, Process process) {
 		this.wb = wb;
 		this.styles = Styles.of(wb);
 		this.db = db;
 		this.process = process;
-		entitySheets = Collections.emptyList();
+		entitySheets = List.of(
+			new LocationWriter(this)
+		);
 	}
 
 	void write() {
 		writeInfoSheet();
+	}
+
+	Styles styles() {
+		return styles;
 	}
 
 	void visit(RootEntity e) {
@@ -40,8 +45,13 @@ class WorkbookWriter {
 		}
 	}
 
+	SheetWriter createSheet(Tab tab) {
+		var sheet = wb.createSheet(tab.label());
+		return new SheetWriter(sheet, this);
+	}
+
 	private void writeInfoSheet() {
-		var sheet = new SheetWriter(Tab.GENERAL_INFO, this);
+		var sheet = createSheet(Tab.GENERAL_INFO);
 
 		sheet.next(Section.GENERAL_INFO)
 			.next(Field.UUID, process.refId)

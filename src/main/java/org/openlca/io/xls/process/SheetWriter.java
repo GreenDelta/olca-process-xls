@@ -4,8 +4,10 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.openlca.core.model.RootEntity;
+import org.openlca.core.model.Version;
 
 import java.util.Date;
+import java.util.function.Consumer;
 
 class SheetWriter {
 
@@ -15,10 +17,25 @@ class SheetWriter {
 
 	private int cursor;
 
-	SheetWriter(Tab tab, WorkbookWriter wb) {
+	SheetWriter(Sheet sheet, WorkbookWriter wb) {
 		this.wb = wb;
-		this.sheet = wb.wb.createSheet(tab.label());
-		this.styles = wb.styles;
+		this.sheet = sheet;
+		this.styles = wb.styles();
+	}
+
+	SheetWriter withColumnWidths(int count, int width) {
+		for (int i = 0; i < count; i++) {
+			sheet.setColumnWidth(i, width * 256);
+		}
+		return this;
+	}
+
+	void header(Field... fields) {
+		for (var i = 0; i < fields.length; i++) {
+			cell(cursor, i, fields[i].label())
+				.setCellStyle(styles.bold());
+		}
+		cursor++;
 	}
 
 	SheetWriter next(Section section) {
@@ -64,11 +81,20 @@ class SheetWriter {
 		return this;
 	}
 
+	void next(Consumer<RowWriter> fn) {
+		fn.accept(new RowWriter(this, row(cursor)));
+		cursor++;
+	}
+
 	void next() {
 		cursor++;
 	}
 
 	private Cell cell(int row, int col, String val) {
+		return cell(row(row), col, val);
+	}
+
+	private Cell cell(Row row, int col, String val) {
 		var cell = cell(row, col);
 		if (val != null) {
 			cell.setCellValue(val);
@@ -76,11 +102,29 @@ class SheetWriter {
 		return cell;
 	}
 
+	private Cell cell(Row row, int col, double val) {
+		var cell = cell(row, col);
+		cell.setCellValue(val);
+		return cell;
+	}
+
+	private Cell cellAsDate(Row row, int col, long val) {
+		var cell = cell(row, col);
+		if (val > 0) {
+			var date = new Date(val);
+			cell.setCellValue(date);
+		}
+		return cell;
+	}
+
 	private Cell cell(int row, int col) {
-		var r = row(row);
-		var cell = r.getCell(col);
+		return cell(row(row), col);
+	}
+
+	private Cell cell(Row row, int col) {
+		var cell = row.getCell(col);
 		return cell == null
-			? r.createCell(col)
+			? row.createCell(col)
 			: cell;
 	}
 
@@ -89,5 +133,41 @@ class SheetWriter {
 		return r == null
 			? sheet.createRow(row)
 			: r;
+	}
+
+	static class RowWriter {
+
+		private final SheetWriter sheet;
+		private final Row row;
+		private int col = 0;
+
+		private RowWriter(SheetWriter sheet, Row row) {
+			this.sheet = sheet;
+			this.row = row;
+		}
+
+		RowWriter next(String value) {
+			sheet.cell(row, col, value);
+			col++;
+			return this;
+		}
+
+		RowWriter next(double value) {
+			sheet.cell(row, col, value);
+			col++;
+			return this;
+		}
+
+		RowWriter nextAsDate(long value) {
+			sheet.cellAsDate(row, col, value);
+			col++;
+			return this;
+		}
+
+		RowWriter nextAsVersion(long value) {
+			var v = new Version(value).toString();
+			return next(v);
+		}
+
 	}
 }
