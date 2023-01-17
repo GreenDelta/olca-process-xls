@@ -41,7 +41,7 @@ class WorkbookWriter {
 	}
 
 	private void writeInfoSheet() {
-		var sheet = new SheetWriter(Tab.GENERAL_INFORMATION, this);
+		var sheet = new SheetWriter(Tab.GENERAL_INFO, this);
 
 		sheet.next(Section.GENERAL_INFO)
 			.next(Field.UUID, process.refId)

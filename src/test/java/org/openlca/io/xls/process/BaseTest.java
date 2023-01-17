@@ -9,7 +9,7 @@ import org.openlca.core.model.store.InMemoryStore;
 
 import java.io.File;
 
-public class XlsProcessWriterTest {
+public class BaseTest {
 
 	@Test
 	public void testWrite() throws Exception {

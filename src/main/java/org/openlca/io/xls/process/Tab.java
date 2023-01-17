@@ -11,7 +11,7 @@ enum Tab {
 	FLOW_PROPERTIES("Flow properties"),
 	FLOW_PROPERTY_FACTORS("Flow property factors"),
 	FLOWS("Flows"),
-	GENERAL_INFORMATION("General information"),
+	GENERAL_INFO("General information"),
 	INPUTS("Inputs"),
 	LOCATIONS("Locations"),
 	MODELING_AND_VALIDATION("Modeling and validation"),
