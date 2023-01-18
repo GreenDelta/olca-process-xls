@@ -25,6 +25,8 @@ class OutConfig {
 		this.db = db;
 		this.process = process;
 		entitySheets = List.of(
+			new OutFlowSync(this),
+			new OutFlowPropertyFactorSync(this),
 			new OutFlowPropertySync(this),
 			new OutUnitGroupSync(this),
 			new OutUnitSync(this),
