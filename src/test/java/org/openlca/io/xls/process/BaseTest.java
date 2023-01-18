@@ -66,6 +66,11 @@ public class BaseTest {
 	}
 
 	@Test
+	public void testQuantRef() {
+		assertEquals("p", synced.quantitativeReference.flow.name);
+	}
+
+	@Test
 	public void testGeography() {
 		var loc = synced.location;
 		assertNotNull(loc);

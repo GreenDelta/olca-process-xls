@@ -74,6 +74,7 @@ public class XlsProcessReader {
 				this, wb, process, new EntityIndex(db, log), db, log);
 			syncRefData(config);
 			syncGeneralInfo(config);
+			InExchangeSync.sync(config);
 
 			var synced = process.id == 0
 				? db.insert(process)
