@@ -2,23 +2,22 @@ package org.openlca.io.xls.process;
 
 import org.openlca.core.model.Location;
 import org.openlca.core.model.ModelType;
-import org.openlca.io.xls.process.XlsProcessReader.ReaderConfig;
 
-class LocationReader {
+class InLocationSync {
 
-	private final ReaderConfig config;
+	private final InConfig config;
 	private final SheetReader sheet;
 
-	LocationReader(ReaderConfig config, SheetReader sheet) {
+	InLocationSync(InConfig config, SheetReader sheet) {
 		this.config = config;
 		this.sheet = sheet;
 	}
 
-	static void sync(ReaderConfig config) {
+	static void sync(InConfig config) {
 		var sheet = config.getSheet(Tab.LOCATIONS);
 		if (sheet == null)
 			return;
-		new LocationReader(config, sheet).sync();
+		new InLocationSync(config, sheet).sync();
 	}
 
 	private void sync() {

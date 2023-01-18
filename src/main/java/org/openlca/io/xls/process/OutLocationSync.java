@@ -6,12 +6,12 @@ import org.openlca.core.model.RootEntity;
 import java.util.HashSet;
 import java.util.Set;
 
-class LocationWriter implements EntityWriter {
+class OutLocationSync implements OutEntitySync {
 
-	private final WorkbookWriter wb;
+	private final OutConfig wb;
 	private final Set<Location> locations = new HashSet<>();
 
-	LocationWriter(WorkbookWriter wb) {
+	OutLocationSync(OutConfig wb) {
 		this.wb = wb;
 	}
 
@@ -40,11 +40,11 @@ class LocationWriter implements EntityWriter {
 			Field.VERSION
 		);
 
-		for (var location : Util.sort(locations)) {
+		for (var location : Out.sort(locations)) {
 			cursor.next(row -> row.next(location.refId)
 				.next(location.code)
 				.next(location.name)
-				.next(Util.pathOf(location))
+				.next(Out.pathOf(location))
 				.next(location.description)
 				.next(location.latitude)
 				.next(location.longitude)

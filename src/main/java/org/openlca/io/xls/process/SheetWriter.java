@@ -13,11 +13,11 @@ class SheetWriter {
 
 	private final Sheet sheet;
 	private final Styles styles;
-	private final WorkbookWriter wb;
+	private final OutConfig wb;
 
 	private int cursor;
 
-	SheetWriter(Sheet sheet, WorkbookWriter wb) {
+	SheetWriter(Sheet sheet, OutConfig wb) {
 		this.wb = wb;
 		this.sheet = sheet;
 		this.styles = wb.styles();

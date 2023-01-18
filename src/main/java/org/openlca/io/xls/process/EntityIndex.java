@@ -138,7 +138,7 @@ class EntityIndex {
 	}
 
 	static String flowKeyOf(Flow flow) {
-		return keyOf(Util.pathOf(flow)) + "/" + keyOf(flow.name);
+		return keyOf(Out.pathOf(flow)) + "/" + keyOf(flow.name);
 	}
 
 }

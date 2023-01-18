@@ -6,7 +6,6 @@ import org.openlca.core.database.IDatabase;
 import org.openlca.core.model.Category;
 import org.openlca.core.model.ModelType;
 import org.openlca.core.model.RootEntity;
-import org.openlca.io.xls.process.XlsProcessReader.ReaderConfig;
 import org.openlca.util.Strings;
 
 import java.util.Date;
@@ -30,7 +29,7 @@ interface CellReader {
 	}
 
 	default <T extends RootEntity> T get(
-		Field field, ReaderConfig config, Class<T> type) {
+		Field field, InConfig config, Class<T> type) {
 		var name = str(field);
 		if (Strings.nullOrEmpty(name))
 			return null;

@@ -70,7 +70,7 @@ public class XlsProcessReader {
 			}
 
 			// sync sheets
-			var config = new ReaderConfig(
+			var config = new InConfig(
 				this, wb, process, new EntityIndex(db, log), db);
 			syncRefData(config);
 			syncGeneralInfo(config);
@@ -115,17 +115,17 @@ public class XlsProcessReader {
 		return d;
 	}
 
-	private EntityIndex syncRefData(ReaderConfig config) {
+	private EntityIndex syncRefData(InConfig config) {
 		var index = new EntityIndex(db, log);
-		LocationReader.sync(config);
+		InLocationSync.sync(config);
 		return index;
 	}
 
-	private void syncGeneralInfo(ReaderConfig config) {
+	private void syncGeneralInfo(InConfig config) {
 		var sheet = config.getSheet(Tab.GENERAL_INFO);
 		if (sheet == null)
 			return;
-		var process = config.process;
+		var process = config.process();
 
 		var info = sheet.read(Section.GENERAL_INFO);
 		if (info != null) {
@@ -178,18 +178,4 @@ public class XlsProcessReader {
 	}
 
 
-	record ReaderConfig(
-		XlsProcessReader reader,
-		Workbook wb,
-		Process process,
-		EntityIndex index,
-		IDatabase db) {
-
-		SheetReader getSheet(Tab tab) {
-			var sheet = wb.getSheet(tab.label());
-			return sheet != null
-				? new SheetReader(sheet)
-				: null;
-		}
-	}
 }

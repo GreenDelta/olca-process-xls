@@ -7,8 +7,9 @@ import org.openlca.util.Strings;
 import java.util.Collection;
 import java.util.List;
 
-final class Util {
-	private Util () {
+final class Out {
+
+	private Out() {
 	}
 
 	static String pathOf(RootEntity e) {
@@ -29,8 +30,8 @@ final class Util {
 			if (c != 0)
 				return c;
 			if (e1 instanceof RootEntity re1 && e2 instanceof RootEntity re2) {
-				var c1 = Util.pathOf(re1);
-				var c2 = Util.pathOf(re2);
+				var c1 = Out.pathOf(re1);
+				var c2 = Out.pathOf(re2);
 				return Strings.compare(c1, c2);
 			}
 			return 0;

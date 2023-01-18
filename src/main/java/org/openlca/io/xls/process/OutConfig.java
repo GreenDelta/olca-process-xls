@@ -10,22 +10,22 @@ import org.openlca.core.model.store.EntityStore;
 import java.util.Date;
 import java.util.List;
 
-class WorkbookWriter {
+class OutConfig {
 
 	private final Workbook wb;
 	private final Styles styles;
 
 	private final EntityStore db;
 	private final Process process;
-	private final List<EntityWriter> entitySheets;
+	private final List<OutEntitySync> entitySheets;
 
-	WorkbookWriter(Workbook wb, EntityStore db, Process process) {
+	OutConfig(Workbook wb, EntityStore db, Process process) {
 		this.wb = wb;
 		this.styles = Styles.of(wb);
 		this.db = db;
 		this.process = process;
 		entitySheets = List.of(
-			new LocationWriter(this)
+			new OutLocationSync(this)
 		);
 	}
 
@@ -59,7 +59,7 @@ class WorkbookWriter {
 		sheet.next(Section.GENERAL_INFO)
 			.next(Field.UUID, process.refId)
 			.next(Field.NAME, process.name)
-			.next(Field.CATEGORY, Util.pathOf(process))
+			.next(Field.CATEGORY, Out.pathOf(process))
 			.next(Field.DESCRIPTION, process.description)
 			.next(Field.VERSION, Version.asString(process.version))
 			.next(Field.LAST_CHANGE, process.lastChange > 0
