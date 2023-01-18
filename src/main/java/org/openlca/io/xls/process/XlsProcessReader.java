@@ -117,6 +117,7 @@ public class XlsProcessReader {
 
 	private EntityIndex syncRefData(InConfig config) {
 		var index = new EntityIndex(db, log);
+		InUnitSync.sync(config);
 		InLocationSync.sync(config);
 		return index;
 	}
