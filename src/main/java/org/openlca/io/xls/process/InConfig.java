@@ -2,6 +2,7 @@ package org.openlca.io.xls.process;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import org.openlca.core.database.IDatabase;
+import org.openlca.core.io.ImportLog;
 import org.openlca.core.model.Process;
 
 record InConfig(
@@ -9,7 +10,8 @@ record InConfig(
 	Workbook wb,
 	Process process,
 	EntityIndex index,
-	IDatabase db) {
+	IDatabase db,
+	ImportLog log) {
 
 	SheetReader getSheet(Tab tab) {
 		var sheet = wb.getSheet(tab.label());

@@ -71,7 +71,7 @@ public class XlsProcessReader {
 
 			// sync sheets
 			var config = new InConfig(
-				this, wb, process, new EntityIndex(db, log), db);
+				this, wb, process, new EntityIndex(db, log), db, log);
 			syncRefData(config);
 			syncGeneralInfo(config);
 
@@ -117,8 +117,10 @@ public class XlsProcessReader {
 
 	private EntityIndex syncRefData(InConfig config) {
 		var index = new EntityIndex(db, log);
+		// order is important here
 		InUnitSync.sync(config);
 		InLocationSync.sync(config);
+		InFlowSync.sync(config);
 		return index;
 	}
 
