@@ -30,12 +30,13 @@ class SheetWriter {
 		return this;
 	}
 
-	void header(Field... fields) {
+	SheetWriter header(Field... fields) {
 		for (var i = 0; i < fields.length; i++) {
 			cell(cursor, i, fields[i].label())
 				.setCellStyle(styles.bold());
 		}
 		cursor++;
+		return this;
 	}
 
 	SheetWriter next(Section section) {
