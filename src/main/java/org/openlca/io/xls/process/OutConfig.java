@@ -1,6 +1,7 @@
 package org.openlca.io.xls.process;
 
 import org.apache.poi.ss.usermodel.Workbook;
+import org.openlca.core.database.IDatabase;
 import org.openlca.core.model.Process;
 import org.openlca.core.model.ProcessDocumentation;
 import org.openlca.core.model.RootEntity;
@@ -34,8 +35,17 @@ class OutConfig {
 		);
 	}
 
+	Process process() {
+		return process;
+	}
+
+	EntityStore db() {
+		return db;
+	}
+
 	void write() {
 		writeInfoSheet();
+		OutExchangeSync.sync(this);
 		for (var sheet : entitySheets) {
 			sheet.flush();
 		}

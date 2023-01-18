@@ -4,6 +4,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.openlca.core.model.RootEntity;
+import org.openlca.core.model.Uncertainty;
+import org.openlca.core.model.UncertaintyType;
 import org.openlca.core.model.Version;
 
 import java.util.Date;
@@ -147,6 +149,10 @@ class SheetWriter {
 			this.row = row;
 		}
 
+		Row rowObject() {
+			return row;
+		}
+
 		RowWriter next(String value) {
 			sheet.cell(row, col, value);
 			col++;
@@ -157,6 +163,12 @@ class SheetWriter {
 			sheet.cell(row, col, value);
 			col++;
 			return this;
+		}
+
+		RowWriter next(Double value) {
+			return value != null
+				? next(value.doubleValue())
+				: next();
 		}
 
 		RowWriter nextAsDate(long value) {
@@ -170,5 +182,42 @@ class SheetWriter {
 			return next(v);
 		}
 
+		RowWriter next() {
+			col++;
+			return this;
+		}
+
+		RowWriter next(Uncertainty u) {
+			var type = u == null || u.distributionType == null
+				? UncertaintyType.NONE
+				: u.distributionType;
+			return switch (type) {
+				case NONE -> next()
+					.next()
+					.next()
+					.next()
+					.next();
+				case NORMAL -> next("normal")
+					.next(u.parameter1)
+					.next(u.parameter2)
+					.next()
+					.next();
+				case LOG_NORMAL -> next("log-normal")
+					.next(u.parameter1)
+					.next(u.parameter2)
+					.next()
+					.next();
+				case TRIANGLE -> next("triangular")
+					.next(u.parameter2)
+					.next()
+					.next(u.parameter1)
+					.next(u.parameter3);
+				case UNIFORM -> next("uniform")
+					.next()
+					.next()
+					.next(u.parameter1)
+					.next(u.parameter2);
+			};
+		}
 	}
 }

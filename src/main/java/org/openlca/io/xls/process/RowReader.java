@@ -17,7 +17,7 @@ class RowReader implements CellReader {
 		return new RowReader(row, fields);
 	}
 
-	int getRowNum() {
+	int rowNum() {
 		return row.getRowNum();
 	}
 
