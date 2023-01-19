@@ -54,6 +54,15 @@ class SheetWriter {
 		return this;
 	}
 
+	SheetWriter next(Field field, boolean value) {
+		cell(cursor, 0, field.label()).setCellStyle(styles.pairLabel());
+		var c = cell(cursor, 1);
+		c.setCellValue(value);
+		c.setCellStyle(styles.pairValue());
+		cursor++;
+		return this;
+	}
+
 	SheetWriter next(Field field, Date date) {
 		cell(cursor, 0, field.label()).setCellStyle(styles.pairLabel());
 		if (date != null) {

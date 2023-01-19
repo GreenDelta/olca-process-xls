@@ -69,6 +69,27 @@ enum Field {
 	SOCIAL_SCHEMA("Social schema"),
 	VALID_FROM("Valid from"),
 	VALID_UNTIL("Valid until"),
+
+	ACCESS_AND_USE_RESTRICTIONS("Access and use restrictions"),
+	COPYRIGHT("Copyright"),
+	CREATION_DATE("Creation date"),
+	DATA_SET_DOCUMENTOR("Data set documentor"),
+	DATA_SET_GENERATOR("Data set generator"),
+	DATA_SET_OWNER("Data set owner"),
+	INTENDED_APPLICATION("Intended application"),
+	PROJECT("Project"),
+	PUBLICATION("Publication"),
+
+	DATA_COLLECTION_PERIOD("Data collection period"),
+	DATA_COMPLETENESS("Data completeness"),
+	DATA_SELECTION("Data selection"),
+	DATA_TREATMENT("Data treatment"),
+	LCI_METHOD("LCI method"),
+	MODELING_CONSTANTS("Modeling constants"),
+	PROCESS_TYPE("Process type"),
+	REVIEW_DETAILS("Review details"),
+	REVIEWER("Reviewer"),
+	SAMPLING_PROCEDURE("Sampling procedure"),
 	;
 
 	private final String label;
@@ -132,6 +153,28 @@ enum Field {
 			case "social schema" -> SOCIAL_SCHEMA;
 			case "valid from" -> VALID_FROM;
 			case "valid until" -> VALID_UNTIL;
+
+			case "access and use restrictions" -> ACCESS_AND_USE_RESTRICTIONS;
+			case "copyright" -> COPYRIGHT;
+			case "creation date" -> CREATION_DATE;
+			case "data set documentor" -> DATA_SET_DOCUMENTOR;
+			case "data set generator" -> DATA_SET_GENERATOR;
+			case "data set owner" -> DATA_SET_OWNER;
+			case "intended application" -> INTENDED_APPLICATION;
+			case "project" -> PROJECT;
+			case "publication" -> PUBLICATION;
+
+			case "data collection period" -> DATA_COLLECTION_PERIOD;
+			case "data completeness" -> DATA_COMPLETENESS;
+			case "data selection" -> DATA_SELECTION;
+			case "data treatment" -> DATA_TREATMENT;
+			case "lci method" -> LCI_METHOD;
+			case "modeling constants" -> MODELING_CONSTANTS;
+			case "process type" -> PROCESS_TYPE;
+			case "review details" -> REVIEW_DETAILS;
+			case "reviewer" -> REVIEWER;
+			case "sampling procedure" -> SAMPLING_PROCEDURE;
+
 			default -> null;
 		};
 	}
