@@ -116,6 +116,7 @@ class SheetWriter {
 		if (val > 0) {
 			var date = new Date(val);
 			cell.setCellValue(date);
+			cell.setCellStyle(styles.date());
 		}
 		return cell;
 	}

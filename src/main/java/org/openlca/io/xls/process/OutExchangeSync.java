@@ -94,6 +94,9 @@ class OutExchangeSync {
 				row.next().next();
 			}
 
+			row.next(e.uncertainty)
+				.next(e.isAvoided ? "x" : null);
+
 			// provider
 			Process provider = null;
 			if (e.defaultProviderId > 0 && Exchanges.isLinkable(e)) {
@@ -106,10 +109,7 @@ class OutExchangeSync {
 				row.next();
 			}
 
-			// other fields
-			row.next(e.uncertainty)
-				.next(e.isAvoided ? "x" : null)
-				.next(e.dqEntry)
+			row.next(e.dqEntry)
 				.next(e.location != null
 					? e.location.name
 					: null)

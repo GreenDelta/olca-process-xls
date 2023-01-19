@@ -47,7 +47,7 @@ class InFlowSync {
 
 		// reference flow property
 		var prop = config.index().get(
-			FlowProperty.class, row.str(Field.FLOW_PROPERTY));
+			FlowProperty.class, row.str(Field.REFERENCE_FLOW_PROPERTY));
 		if (prop == null) {
 			config.log().error("invalid flow property in flow " + (row.rowNum() + 1));
 		} else {

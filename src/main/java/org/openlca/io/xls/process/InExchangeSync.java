@@ -50,7 +50,7 @@ class InExchangeSync {
 	private boolean update(Exchange e, RowReader row) {
 
 		// flow
-		var name = row.str(Field.NAME);
+		var name = row.str(Field.FLOW);
 		if (name == null)
 			return false;
 		var category = row.str(Field.CATEGORY);
