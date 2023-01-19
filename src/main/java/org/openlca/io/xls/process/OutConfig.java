@@ -1,7 +1,6 @@
 package org.openlca.io.xls.process;
 
 import org.apache.poi.ss.usermodel.Workbook;
-import org.openlca.core.database.IDatabase;
 import org.openlca.core.model.Process;
 import org.openlca.core.model.ProcessDocumentation;
 import org.openlca.core.model.RootEntity;
@@ -31,7 +30,9 @@ class OutConfig {
 			new OutFlowPropertySync(this),
 			new OutUnitGroupSync(this),
 			new OutUnitSync(this),
-			new OutLocationSync(this)
+			new OutLocationSync(this),
+			new OutActorSync(this),
+			new OutSourceSync(this)
 		);
 	}
 
