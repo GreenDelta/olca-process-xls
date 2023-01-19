@@ -70,11 +70,11 @@ enum Field {
 	VALID_FROM("Valid from"),
 	VALID_UNTIL("Valid until"),
 
-	ACCESS_AND_USE_RESTRICTIONS("Access and use restrictions"),
+	ACCESS_RESTRICTIONS("Access and use restrictions"),
 	COPYRIGHT("Copyright"),
 	CREATION_DATE("Creation date"),
-	DATA_SET_DOCUMENTOR("Data set documentor"),
-	DATA_SET_GENERATOR("Data set generator"),
+	DATA_DOCUMENTOR("Data set documentor"),
+	DATA_GENERATOR("Data set generator"),
 	DATA_SET_OWNER("Data set owner"),
 	INTENDED_APPLICATION("Intended application"),
 	PROJECT("Project"),
@@ -154,11 +154,11 @@ enum Field {
 			case "valid from" -> VALID_FROM;
 			case "valid until" -> VALID_UNTIL;
 
-			case "access and use restrictions" -> ACCESS_AND_USE_RESTRICTIONS;
+			case "access and use restrictions" -> ACCESS_RESTRICTIONS;
 			case "copyright" -> COPYRIGHT;
 			case "creation date" -> CREATION_DATE;
-			case "data set documentor" -> DATA_SET_DOCUMENTOR;
-			case "data set generator" -> DATA_SET_GENERATOR;
+			case "data set documentor" -> DATA_DOCUMENTOR;
+			case "data set generator" -> DATA_GENERATOR;
 			case "data set owner" -> DATA_SET_OWNER;
 			case "intended application" -> INTENDED_APPLICATION;
 			case "project" -> PROJECT;

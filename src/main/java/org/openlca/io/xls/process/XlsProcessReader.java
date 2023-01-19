@@ -73,8 +73,7 @@ public class XlsProcessReader {
 			var config = new InConfig(
 				this, wb, process, new EntityIndex(db, log), db, log);
 			syncRefData(config);
-			syncGeneralInfo(config);
-			InExchangeSync.sync(config);
+			syncProcessData(config);
 
 			var synced = process.id == 0
 				? db.insert(process)
@@ -127,61 +126,9 @@ public class XlsProcessReader {
 		return index;
 	}
 
-	private void syncGeneralInfo(InConfig config) {
-		var sheet = config.getSheet(Tab.GENERAL_INFO);
-		if (sheet == null)
-			return;
-		var process = config.process();
-
-		var info = sheet.read(Section.GENERAL_INFO);
-		if (info != null) {
-			process.category = info.syncCategory(db, ModelType.PROCESS);
-			process.description = info.str(Field.DESCRIPTION);
-			process.tags = info.str(Field.TAGS);
-		} else {
-			process.category = null;
-			process.description = null;
-			process.tags = null;
-		}
-
-		var doc = process.documentation;
-
-		var time = sheet.read(Section.TIME);
-		if (time != null) {
-			doc.validFrom = info.date(Field.VALID_FROM);
-			doc.validUntil = info.date(Field.VALID_UNTIL);
-			doc.time = info.str(Field.DESCRIPTION);
-		} else {
-			doc.validFrom = null;
-			doc.validUntil = null;
-			doc.time = null;
-		}
-
-		var geo = sheet.read(Section.GEOGRAPHY);
-		if (geo != null) {
-			process.location = geo.get(Field.LOCATION, config, Location.class);
-			doc.geography = geo.str(Field.DESCRIPTION);
-		} else {
-			process.location = null;
-			doc.geography = null;
-		}
-
-		var dqs = sheet.read(Section.DATA_QUALITY);
-		if (dqs != null) {
-			process.dqSystem = dqs.get(
-				Field.PROCESS_SCHEMA, config, DQSystem.class);
-			process.exchangeDqSystem = dqs.get(
-				Field.FLOW_SCHEMA, config, DQSystem.class);
-			process.socialDqSystem = dqs.get(
-				Field.SOCIAL_SCHEMA, config, DQSystem.class);
-			process.dqEntry = dqs.str(Field.DATA_QUALITY_ENTRY);
-		} else {
-			process.dqSystem = null;
-			process.dqEntry = null;
-			process.exchangeDqSystem = null;
-			process.socialDqSystem = null;
-		}
+	private void syncProcessData(InConfig config) {
+		InMetaDataSync.sync(config);
+		InExchangeSync.sync(config);
 	}
-
 
 }

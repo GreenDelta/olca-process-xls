@@ -74,10 +74,10 @@ class OutMetaDataSync {
 		sheet.next(Section.ADMINISTRATIVE_INFO)
 			.next(Field.INTENDED_APPLICATION, doc.intendedApplication)
 			.next(Field.DATA_SET_OWNER, doc.dataSetOwner)
-			.next(Field.DATA_SET_GENERATOR, doc.dataGenerator)
-			.next(Field.DATA_SET_DOCUMENTOR, doc.dataDocumentor)
+			.next(Field.DATA_GENERATOR, doc.dataGenerator)
+			.next(Field.DATA_DOCUMENTOR, doc.dataDocumentor)
 			.next(Field.PUBLICATION, doc.publication)
-			.next(Field.ACCESS_AND_USE_RESTRICTIONS, doc.restrictions)
+			.next(Field.ACCESS_RESTRICTIONS, doc.restrictions)
 			.next(Field.PROJECT, doc.project)
 			.next(Field.CREATION_DATE, doc.creationDate)
 			.next(Field.COPYRIGHT, doc.copyright);
