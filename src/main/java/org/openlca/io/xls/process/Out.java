@@ -1,5 +1,6 @@
 package org.openlca.io.xls.process;
 
+import org.openlca.core.model.Category;
 import org.openlca.core.model.Flow;
 import org.openlca.core.model.FlowProperty;
 import org.openlca.core.model.RefEntity;
@@ -17,6 +18,8 @@ final class Out {
 	}
 
 	static String pathOf(RootEntity e) {
+		if (e instanceof Category c)
+			return c.toPath();
 		return e != null && e.category != null
 			? e.category.toPath()
 			: null;

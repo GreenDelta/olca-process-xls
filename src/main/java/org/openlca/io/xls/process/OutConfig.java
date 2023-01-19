@@ -44,6 +44,7 @@ class OutConfig {
 	void write() {
 		OutMetaDataSync.sync(this);
 		OutExchangeSync.sync(this);
+		OutAllocationSync.sync(this);
 		for (var sheet : entitySheets) {
 			sheet.flush();
 		}

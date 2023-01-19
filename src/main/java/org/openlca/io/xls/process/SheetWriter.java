@@ -25,6 +25,10 @@ class SheetWriter {
 		this.styles = wb.styles();
 	}
 
+	int rowCursor() {
+		return cursor;
+	}
+
 	SheetWriter withColumnWidths(int count, int width) {
 		for (int i = 0; i < count; i++) {
 			sheet.setColumnWidth(i, width * 256);
@@ -98,15 +102,16 @@ class SheetWriter {
 		cursor++;
 	}
 
-	void next() {
+	SheetWriter next() {
 		cursor++;
+		return this;
 	}
 
 	private Cell cell(int row, int col, String val) {
 		return cell(row(row), col, val);
 	}
 
-	private Cell cell(Row row, int col, String val) {
+	Cell cell(Row row, int col, String val) {
 		var cell = cell(row, col);
 		if (val != null) {
 			cell.setCellValue(val);
@@ -141,7 +146,7 @@ class SheetWriter {
 			: cell;
 	}
 
-	private Row row(int row) {
+	Row row(int row) {
 		var r = sheet.getRow(row);
 		return r == null
 			? sheet.createRow(row)

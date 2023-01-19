@@ -90,6 +90,12 @@ enum Field {
 	REVIEW_DETAILS("Review details"),
 	REVIEWER("Reviewer"),
 	SAMPLING_PROCEDURE("Sampling procedure"),
+
+	DEFAULT_ALLOCATION_METHOD("Default allocation method"),
+	ECONOMIC("Economic"),
+	PHYSICAL("Physical"),
+	PRODUCT("Product"),
+	DIRECTION("Direction"),
 	;
 
 	private final String label;
@@ -175,6 +181,11 @@ enum Field {
 			case "reviewer" -> REVIEWER;
 			case "sampling procedure" -> SAMPLING_PROCEDURE;
 
+			case "default allocation method" -> DEFAULT_ALLOCATION_METHOD;
+			case "economic" -> ECONOMIC;
+			case "physical" -> PHYSICAL;
+			case "product" -> PRODUCT;
+			case "direction" -> DIRECTION;
 			default -> null;
 		};
 	}

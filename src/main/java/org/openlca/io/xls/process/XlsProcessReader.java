@@ -4,9 +4,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.openlca.core.database.IDatabase;
 import org.openlca.core.io.ImportLog;
-import org.openlca.core.model.DQSystem;
-import org.openlca.core.model.Location;
-import org.openlca.core.model.ModelType;
 import org.openlca.core.model.Process;
 import org.openlca.core.model.ProcessDocumentation;
 import org.openlca.core.model.Version;
@@ -115,15 +112,13 @@ public class XlsProcessReader {
 		return d;
 	}
 
-	private EntityIndex syncRefData(InConfig config) {
-		var index = new EntityIndex(db, log);
+	private void syncRefData(InConfig config) {
 		// order is important here
 		InActorSync.sync(config);
 		InSourceSync.sync(config);
 		InUnitSync.sync(config);
 		InLocationSync.sync(config);
 		InFlowSync.sync(config);
-		return index;
 	}
 
 	private void syncProcessData(InConfig config) {
