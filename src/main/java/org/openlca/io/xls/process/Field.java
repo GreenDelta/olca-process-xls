@@ -96,6 +96,8 @@ enum Field {
 	PHYSICAL("Physical"),
 	PRODUCT("Product"),
 	DIRECTION("Direction"),
+
+	VALUE("Value"),
 	;
 
 	private final String label;
@@ -186,6 +188,9 @@ enum Field {
 			case "physical" -> PHYSICAL;
 			case "product" -> PRODUCT;
 			case "direction" -> DIRECTION;
+
+			case "value" -> VALUE;
+
 			default -> null;
 		};
 	}

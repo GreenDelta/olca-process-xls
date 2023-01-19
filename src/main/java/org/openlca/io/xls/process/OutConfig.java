@@ -29,7 +29,8 @@ class OutConfig {
 			new OutUnitSync(this),
 			new OutLocationSync(this),
 			new OutActorSync(this),
-			new OutSourceSync(this)
+			new OutSourceSync(this),
+			new OutProviderSync(this)
 		);
 	}
 
