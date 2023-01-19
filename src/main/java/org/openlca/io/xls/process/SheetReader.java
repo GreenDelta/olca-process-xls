@@ -15,6 +15,10 @@ class SheetReader {
 		this.sheet = sheet;
 	}
 
+	Sheet sheetObject() {
+		return sheet;
+	}
+
 	void eachRow(Consumer<RowReader> fn) {
 		var fields = FieldMap.of(sheet.getRow(0));
 		if (fields.isEmpty())
@@ -31,7 +35,7 @@ class SheetReader {
 	 */
 	SectionReader read(Section section) {
 		var fields = new FieldMap();
-		eachRawRow(section, row -> {
+		eachRowObject(section, row -> {
 			var field = In.stringOf(row, 0);
 			fields.put(field, row.getRowNum());
 		});
@@ -41,7 +45,7 @@ class SheetReader {
 	/**
 	 * Iterates over each value row under a section.
 	 */
-	private void eachRawRow(Section section, Consumer<Row> fn) {
+	void eachRowObject(Section section, Consumer<Row> fn) {
 		if (section == null || fn == null)
 			return;
 		Row start = null;
@@ -70,7 +74,7 @@ class SheetReader {
 
 	void eachRow(Section section, Consumer<RowReader> fn) {
 		var fieldsRef = new AtomicReference<FieldMap>();
-		eachRawRow(section, row -> {
+		eachRowObject(section, row -> {
 			var fields = fieldsRef.get();
 			if (fields == null) {
 				fields = FieldMap.of(row);

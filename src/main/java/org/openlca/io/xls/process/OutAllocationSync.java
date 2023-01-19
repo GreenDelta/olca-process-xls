@@ -31,7 +31,7 @@ class OutAllocationSync {
 			.withColumnWidths(4, 25)
 			.next(Field.DEFAULT_ALLOCATION_METHOD, defaultMethod());
 		List<Exchange> outputs = getProviderFlows();
-		writeFactorSection(sheet, outputs);
+		writeSimpleFactors(sheet, outputs);
 		sheet.next().next();
 		writeCausalFactors(sheet, outputs);
 	}
@@ -48,7 +48,7 @@ class OutAllocationSync {
 		};
 	}
 
-	private void writeFactorSection(
+	private void writeSimpleFactors(
 		SheetWriter sheet, List<Exchange> providerFlows) {
 		sheet.next(Section.PHYSICAL_ECONOMIC_ALLOCATION);
 		sheet.header(
@@ -76,11 +76,11 @@ class OutAllocationSync {
 			Field.CATEGORY,
 			Field.DIRECTION,
 			Field.AMOUNT);
-
 		var rowObj = sheet.row(sheet.rowCursor() - 1);
 		for (int i = 0; i < providerFlows.size(); i++) {
 			sheet.cell(rowObj, 4 + i, providerFlows.get(i).flow.name);
 		}
+
 		for (var e : getAllocatableFlows()) {
 			sheet.next(row -> {
 				row.next(e.flow.name)

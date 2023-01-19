@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.UUID;
 
 final class In {
+
 	private In() {
 	}
 
@@ -30,6 +31,10 @@ final class In {
 		return row != null
 			? row.getCell(col)
 			: null;
+	}
+
+	static String stringOf(Sheet sheet, int row, int col) {
+		return stringOf(cell(sheet, row, col));
 	}
 
 	static String stringOf(Row row, int col) {
