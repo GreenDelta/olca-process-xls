@@ -16,7 +16,7 @@ class OutParameterSync {
 		this.config = config;
 	}
 
-	public static void write(OutConfig config) {
+	static void sync(OutConfig config) {
 		new OutParameterSync(config).write();
 	}
 
