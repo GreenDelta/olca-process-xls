@@ -25,8 +25,6 @@ class OutAllocationSync {
 	}
 
 	private void write() {
-		if (process.allocationFactors.isEmpty())
-			return;
 		var sheet = config.createSheet(Tab.ALLOCATION)
 			.withColumnWidths(4, 25)
 			.next(Field.DEFAULT_ALLOCATION_METHOD, defaultMethod());
@@ -56,13 +54,14 @@ class OutAllocationSync {
 			Field.CATEGORY,
 			Field.PHYSICAL,
 			Field.ECONOMIC);
+		if (providerFlows.size() < 2)
+			return;
 		for (var e : providerFlows) {
-			sheet.next(row -> {
+			sheet.next(row ->
 				row.next(e.flow.name)
 					.next(Out.pathOf(e.flow))
 					.next(getFactor(e, AllocationMethod.PHYSICAL))
-					.next(getFactor(e, AllocationMethod.ECONOMIC));
-			});
+					.next(getFactor(e, AllocationMethod.ECONOMIC)));
 		}
 	}
 
@@ -80,6 +79,8 @@ class OutAllocationSync {
 		for (int i = 0; i < providerFlows.size(); i++) {
 			sheet.cell(rowObj, 4 + i, providerFlows.get(i).flow.name);
 		}
+		if (providerFlows.size() < 2)
+			return;
 
 		for (var e : getAllocatableFlows()) {
 			sheet.next(row -> {

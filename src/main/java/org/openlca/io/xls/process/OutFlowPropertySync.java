@@ -23,8 +23,6 @@ class OutFlowPropertySync implements OutEntitySync {
 
 	@Override
 	public void flush() {
-		if (properties.isEmpty())
-			return;
 		var sheet = config.createSheet(Tab.FLOW_PROPERTIES)
 			.withColumnWidths(8, 25)
 			.header(

@@ -24,8 +24,6 @@ class OutLocationSync implements OutEntitySync {
 
 	@Override
 	public void flush() {
-		if (locations.isEmpty())
-			return;
 		var cursor = wb.createSheet(Tab.LOCATIONS)
 			.withColumnWidths(5, 25);
 		cursor.header(

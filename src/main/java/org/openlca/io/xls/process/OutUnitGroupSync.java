@@ -22,9 +22,6 @@ class OutUnitGroupSync implements OutEntitySync {
 
 	@Override
 	public void flush() {
-		if (groups.isEmpty())
-			return;
-
 		var sheet = config.createSheet(Tab.UNIT_GROUPS)
 			.withColumnWidths(8, 25)
 			.header(

@@ -24,8 +24,6 @@ class OutActorSync implements OutEntitySync {
 
 	@Override
 	public void flush() {
-		if (actors.isEmpty())
-			return;
 		var sheet = config.createSheet(Tab.ACTORS)
 			.withColumnWidths(14, 25)
 			.header(

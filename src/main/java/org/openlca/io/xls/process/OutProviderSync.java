@@ -24,8 +24,6 @@ class OutProviderSync implements OutEntitySync {
 
 	@Override
 	public void flush() {
-		if (providers.isEmpty())
-			return;
 		var cursor = config.createSheet(Tab.PROVIDERS)
 			.withColumnWidths(4, 25)
 			.header(

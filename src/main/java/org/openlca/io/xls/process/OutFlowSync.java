@@ -24,8 +24,6 @@ class OutFlowSync implements OutEntitySync {
 
 	@Override
 	public void flush() {
-		if (flows.isEmpty())
-			return;
 		var sheet = config.createSheet(Tab.FLOWS)
 			.withColumnWidths(10, 25)
 			.header(

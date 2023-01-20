@@ -27,8 +27,6 @@ class OutExchangeSync {
 
 	private void write(Tab tab) {
 		var exchanges = getExchanges(tab);
-		if (exchanges.isEmpty())
-			return;
 		var sheet = config.createSheet(tab);
 		writeHeader(sheet);
 		for (var e : exchanges) {

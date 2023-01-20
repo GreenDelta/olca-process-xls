@@ -28,10 +28,6 @@ class OutUnitSync implements OutEntitySync {
 
 	@Override
 	public void flush() {
-		var items = getItems();
-		if (items.isEmpty())
-			return;
-
 		var sheet = config.createSheet(Tab.UNITS)
 			.withColumnWidths(6, 25)
 			.header(
