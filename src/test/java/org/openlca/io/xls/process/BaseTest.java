@@ -16,29 +16,25 @@ import org.openlca.core.model.ProcessDocumentation;
 import org.openlca.core.model.Source;
 import org.openlca.core.model.store.InMemoryStore;
 
-import java.io.IOException;
-import java.nio.file.Files;
-
 public class BaseTest {
 
 	private final IDatabase db = Tests.db();
-	private Process origin;
 	private Process synced;
 
 	@Before
-	public void setup() throws IOException {
+	public void setup() {
 		var store = InMemoryStore.create();
 		var mass = Tests.createMass(store);
 		var p = Flow.product("p", mass);
 
-		origin = Process.of("P", p);
-		var doc = origin.documentation = new ProcessDocumentation();
+		var process = Process.of("P", p);
+		var doc = process.documentation = new ProcessDocumentation();
 		var root = Category.of("some", ModelType.PROCESS);
-		origin.category = Category.childOf(root, "category");
+		process.category = Category.childOf(root, "category");
 
 		var location = Location.of("Aruba", "AW");
-		origin.location = location;
-		origin.documentation.geography = "about geography";
+		process.location = location;
+		process.documentation.geography = "about geography";
 
 		var actor = Actor.of("Actor");
 		var source1 = Source.of("Source 1");
@@ -61,15 +57,9 @@ public class BaseTest {
 		doc.dataSetOwner = actor;
 
 		// write and read
-		store.insert(actor, source1, source2, p, location, origin);
-		var file = Files.createTempFile("_olca_", ".xlsx");
-		XlsProcessWriter.of(store)
-			.write(origin, file.toFile());
-		synced = XlsProcessReader.of(db)
-			.sync(file.toFile())
-			.orElseThrow();
-		// System.out.println(file);
-		Files.delete(file);
+		store.insert(actor, source1, source2, p, location, process);
+
+		synced = Tests.syncWithDb(process, store);
 	}
 
 	@After
@@ -79,10 +69,10 @@ public class BaseTest {
 
 	@Test
 	public void testBasicMetaData() {
-		assertEquals(origin.refId, synced.refId);
-		assertEquals(origin.name, synced.name);
-		assertEquals(origin.lastChange, synced.lastChange);
-		assertEquals(origin.category.toPath(), "some/category");
+		assertEquals(synced.refId, synced.refId);
+		assertEquals(synced.name, synced.name);
+		assertEquals(synced.lastChange, synced.lastChange);
+		assertEquals(synced.category.toPath(), "some/category");
 	}
 
 	@Test

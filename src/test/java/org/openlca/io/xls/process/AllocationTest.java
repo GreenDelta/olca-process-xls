@@ -15,7 +15,6 @@ import org.openlca.core.model.Process;
 import org.openlca.core.model.store.InMemoryStore;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 
 public class AllocationTest {
@@ -24,7 +23,7 @@ public class AllocationTest {
 	private Process synced;
 
 	@Before
-	public void setup() throws IOException {
+	public void setup() {
 		var store = InMemoryStore.create();
 		var mass = Tests.createMass(store);
 		var p = Flow.product("p", mass);
@@ -45,10 +44,7 @@ public class AllocationTest {
 			AllocationFactor.causal(q, elemOut, 0.9)
 		));
 
-		var file = Files.createTempFile("_olca_", ".xlsx").toFile();
-		XlsProcessWriter.of(store).write(process, file);
-		synced = XlsProcessReader.of(db).sync(file).orElseThrow();
-		Files.delete(file.toPath());
+		synced = Tests.syncWithDb(process, store);
 	}
 
 	@After
