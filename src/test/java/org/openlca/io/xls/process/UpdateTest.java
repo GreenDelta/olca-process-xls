@@ -14,7 +14,8 @@ import org.openlca.core.model.FlowProperty;
 import org.openlca.core.model.ModelType;
 import org.openlca.core.model.Process;
 import org.openlca.core.model.ProcessDocumentation;
-import org.openlca.core.model.UnitGroup;
+import org.openlca.core.model.Uncertainty;
+import org.openlca.core.model.UncertaintyType;
 import org.openlca.core.model.Version;
 import org.openlca.jsonld.input.UpdateMode;
 
@@ -27,14 +28,13 @@ public class UpdateTest {
 
 	@Before
 	public void setup() {
-		var units = UnitGroup.of("Mass units", "kg");
-		var mass = FlowProperty.of("Mass", units);
+		var mass = Tests.createMass(db);
 		var p = Flow.product("p", mass);
-
 		process = Process.of("P", p);
 		process.documentation = new ProcessDocumentation();
 		var root = Category.of("some", ModelType.PROCESS);
 		process.category = Category.childOf(root, "category");
+		db.insert(p, root, process);
 	}
 
 	@After
@@ -54,14 +54,63 @@ public class UpdateTest {
 		v.incMinor();
 		process.version = v.getValue();
 
-		var synced = sync(process, UpdateMode.IF_NEWER);
+		var synced = sync(UpdateMode.IF_NEWER);
 		assertNotSame(process, synced);
 		assertEquals(synced.dqSystem, schema);
 		assertEquals(synced.exchangeDqSystem, schema);
 		assertEquals(synced.socialDqSystem, schema);
 	}
 
-	private Process sync(Process process, UpdateMode mode) {
+	@Test
+	public void testUncertainty() {
+		var mass = db.getForName(FlowProperty.class, "Mass");
+		var flow = Flow.elementary("e", mass);
+
+		for (var type : UncertaintyType.values()) {
+			if (type == UncertaintyType.NONE)
+				continue;
+			var e = process.output(flow, 0.42);
+			e.uncertainty = switch (type) {
+				case NORMAL -> Uncertainty.normal(0.42, 0.2);
+				case LOG_NORMAL -> Uncertainty.logNormal(0.42, 1.2);
+				case UNIFORM -> Uncertainty.uniform(0.2, 0.8);
+				case TRIANGLE -> Uncertainty.triangle(0.2, 0.7, 0.8);
+				default -> null;
+			};
+		}
+
+		var synced = sync(UpdateMode.ALWAYS);
+		for (var type : UncertaintyType.values()) {
+			if (type == UncertaintyType.NONE)
+				continue;
+			var u = synced.exchanges.stream()
+				.filter(e -> e.uncertainty.distributionType == type)
+				.map(e -> e.uncertainty)
+				.findAny()
+				.orElseThrow();
+			switch (type) {
+				case NORMAL -> {
+					assertEquals(0.42, u.parameter1, 1e-17);
+					assertEquals(0.2, u.parameter2, 1e-17);
+				}
+				case LOG_NORMAL -> {
+					assertEquals(0.42, u.parameter1, 1e-17);
+					assertEquals(1.2, u.parameter2, 1e-17);
+				}
+				case UNIFORM -> {
+					assertEquals(0.2, u.parameter1, 1e-17);
+					assertEquals(0.8, u.parameter2, 1e-17);
+				}
+				case TRIANGLE -> {
+					assertEquals(0.2, u.parameter1, 1e-17);
+					assertEquals(0.7, u.parameter2, 1e-17);
+					assertEquals(0.8, u.parameter3, 1e-17);
+				}
+			}
+		}
+	}
+
+	private Process sync(UpdateMode mode) {
 		try {
 			var file = Files.createTempFile("_olca_", ".xlsx").toFile();
 			XlsProcessWriter.of(db).write(process, file);
@@ -69,7 +118,8 @@ public class UpdateTest {
 				.withUpdates(mode)
 				.sync(file)
 				.orElseThrow();
-			Files.delete(file.toPath());
+			System.out.println(file.getAbsolutePath());
+			// Files.delete(file.toPath());
 			return synced;
 		} catch (IOException e) {
 			throw new RuntimeException(e);

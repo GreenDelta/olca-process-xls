@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openlca.core.database.IDatabase;
+import org.openlca.core.model.Actor;
 import org.openlca.core.model.Category;
 import org.openlca.core.model.Flow;
 import org.openlca.core.model.Location;
@@ -17,7 +18,6 @@ import org.openlca.core.model.store.InMemoryStore;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.stream.Collectors;
 
 public class BaseTest {
 
@@ -40,6 +40,7 @@ public class BaseTest {
 		origin.location = location;
 		origin.documentation.geography = "about geography";
 
+		var actor = Actor.of("Actor");
 		var source1 = Source.of("Source 1");
 		var source2 = Source.of("Source 2");
 		doc.sources.add(source1);
@@ -50,9 +51,17 @@ public class BaseTest {
 		doc.completeness = "completeness";
 		doc.inventoryMethod = "inventoryMethod";
 		doc.dataTreatment = "dataTreatment";
+		doc.dataSelection = "dataSelection";
+		doc.modelingConstants = "modelingConstants";
+		doc.sampling = "sampling";
+
+		doc.reviewer = actor;
+		doc.dataDocumentor = actor;
+		doc.dataGenerator = actor;
+		doc.dataSetOwner = actor;
 
 		// write and read
-		store.insert(source1, source2, p, location, origin);
+		store.insert(actor, source1, source2, p, location, origin);
 		var file = Files.createTempFile("_olca_", ".xlsx");
 		XlsProcessWriter.of(store)
 			.write(origin, file.toFile());
@@ -95,6 +104,18 @@ public class BaseTest {
 	}
 
 	@Test
+	public void testModelling() {
+		var doc = synced.documentation;
+		assertEquals("dataCollectionPeriod", doc.dataCollectionPeriod);
+		assertEquals("completeness", doc.completeness);
+		assertEquals("inventoryMethod", doc.inventoryMethod);
+		assertEquals("dataTreatment", doc.dataTreatment);
+		assertEquals("dataSelection", doc.dataSelection);
+		assertEquals("modelingConstants", doc.modelingConstants);
+		assertEquals("sampling", doc.sampling);
+	}
+
+	@Test
 	public void testSources() {
 		var sources = synced.documentation.sources
 			.stream()
@@ -102,5 +123,14 @@ public class BaseTest {
 			.toList();
 		assertTrue(sources.contains("Source 1"));
 		assertTrue(sources.contains("Source 2"));
+	}
+
+	@Test
+	public void testActor() {
+		var doc = synced.documentation;
+		assertEquals("Actor", doc.reviewer.name);
+		assertEquals("Actor", doc.dataDocumentor.name);
+		assertEquals("Actor", doc.dataGenerator.name);
+		assertEquals("Actor", doc.dataSetOwner.name);
 	}
 }
