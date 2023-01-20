@@ -53,119 +53,208 @@ the fields `Name`, `Value`, `Uncertainty`, etc.
 
 Below the possible sheets, sections, and fields are listed:
 
-* Sheet `Actors`
-* Sheet `Administrative information`
-* Sheet `Allocation`
-* Sheet `Flow properties`
-* Sheet `Flow property factors`
-* Sheet `Flows`
-* Sheet `General information`
-* Sheet `Inputs`
-* Sheet `Locations`
-* Sheet `Modeling and validation`
-* Sheet `Outputs`
-* Sheet `Parameters`
-* Sheet `Providers`
-* Sheet `Sources`
-* Sheet `Unit groups`
-* Sheet `Units`
-
-  * Section `Administrative information`
-  * Section `Calculated parameters`
-  * Section `Causal allocation`
-  * Section `Data quality`
-  * Section `Data source information`
-  * Section `General information`
-  * Section `Geography`
-  * Section `Global calculated parameters`
-  * Section `Global input parameters`
-  * Section `Input parameters`
-  * Section `Modeling and validation`
-  * Section `Physical & economic allocation`
-  * Section `Process evaluation and validation`
-  * Section `Sources`
-  * Section `Technology`
-  * Section `Time`
-
-  * Field `Address`:
-  * Field `Amount`:
-  * Field `CAS`:
-  * Field `Category`:
-  * Field `City`:
-  * Field `Code`:
-  * Field `Conversion factor`:
-  * Field `Costs/Revenues`:
-  * Field `Country`:
-  * Field `Currency`:
-  * Field `Data quality entry`:
-  * Field `Default flow property`:
-  * Field `Description`:
-  * Field `E-Mail`:
-  * Field `Flow`:
-  * Field `Flow property`:
-  * Field `Formula`:
-  * Field `Is reference?`:
-  * Field `Is avoided?`:
-  * Field `Last change`:
-  * Field `Latitude`:
-  * Field `Location`:
-  * Field `Longitude`:
-  * Field `Maximum`:
-  * Field `(G)Mean | Mode`:
-  * Field `Minimum`:
-  * Field `Name`:
-  * Field `Provider`:
-  * Field `Reference flow property`:
-  * Field `Reference unit`:
-  * Field `SD | GSD`:
-  * Field `Synonyms`:
-  * Field `Tags`:
-  * Field `Telefax`:
-  * Field `Telephone`:
-  * Field `Text reference`:
-  * Field `Type`:
-  * Field `Uncertainty`:
-  * Field `Unit`:
-  * Field `Unit group`:
-  * Field `URL`:
-  * Field `UUID`:
-  * Field `Version`:
-  * Field `Website`:
-  * Field `Year`:
-  * Field `Zip code`:
-  * Field `Flow schema`:
-  * Field `Process schema`:
-  * Field `Social schema`:
-  * Field `Valid from`:
-  * Field `Valid until`:
-  * Field `Access and use restrictions`:
-  * Field `Copyright`:
-  * Field `Creation date`:
-  * Field `Data set documentor`:
-  * Field `Data set generator`:
-  * Field `Data set owner`:
-  * Field `Intended application`:
-  * Field `Project`:
-  * Field `Publication`:
-  * Field `Data collection period`:
-  * Field `Data completeness`:
-  * Field `Data selection`:
-  * Field `Data treatment`:
-  * Field `LCI method`:
-  * Field `Modeling constants`:
-  * Field `Process type`:
-  * Field `Review details`:
-  * Field `Reviewer`:
-  * Field `Sampling procedure`:
-  * Field `Default allocation method`:
-  * Field `Economic`:
-  * Field `Physical`:
-  * Field `Product`:
-  * Field `Direction`:
-  * Field `Value`:
-
 * Sheet `General information`:
   * Section `General information`
     * Field `UUID`: the unique ID of the process, string
     * Field `Name`: the name of the process, string
-    * Field
+    * Field `Category`:
+    * Field `Description`:
+    * Field `Version`:
+    * Field `Last change`:
+    * Field `Tags`:
+  * Section `Time`
+   * Field `Valid from`:
+   * Field `Valid until`:
+   * Field `Description`:
+  * Section `Geography`
+    * Field `Location`:
+    * Field `Description`:
+  * Section `Technology`
+    * Field `Description`:
+  * Section `Data quality`
+    * Field `Flow schema`:
+    * Field `Data quality entry`:
+    * Field `Process schema`:
+    * Field `Social schema`:
+
+* Sheet `Modeling and validation`
+  * Section `Modeling and validation`
+    * Field `Process type`:
+    * Field `LCI method`:
+    * Field `Modeling constants`:
+    * Field `Data completeness`:
+    * Field `Data selection`:
+    * Field `Data treatment`:
+  * Section `Data source information`
+    * Field `Data collection period`:
+    * Field `Sampling procedure`:
+  * Section `Process evaluation and validation`
+    * Field `Review details`:
+    * Field `Reviewer`:
+  * Section `Sources`
+
+* Sheet `Administrative information`
+  * Section `Administrative information`
+    * Field `Intended application`:
+    * Field `Data set owner`:
+    * Field `Data set generator`:
+    * Field `Data set documentor`:
+    * Field `Publication`:
+    * Field `Access and use restrictions`:
+    * Field `Project`:
+    * Field `Creation date`:
+    * Field `Copyright`: `true`, if there is a copyright on the data set
+
+* Sheet `Inputs | Outputs`: inputs and outputs of the process
+  * Field `Is reference?`: `true | yes | x`, if this is the reference flow of the process
+  * Field `Flow`:
+  * Field `Category`:
+  * Field `Amount`:
+  * Field `Unit`:
+  * Field `Costs/Revenues`:
+  * Field `Currency`:
+  * Field `Uncertainty`:
+  * Field `(G)Mean | Mode`:
+  * Field `SD | GSD`:
+  * Field `Minimum`:
+  * Field `Maximum`:
+  * Field `Is avoided?`:
+  * Field `Provider`:
+  * Field `Data quality entry`:
+  * Field `Location`:
+  * Field `Description`:
+
+* Sheet `Allocation`
+  * Field `Default allocation method`: default allocation method as field-value
+    pair: possible values are `none`, `physical`, `economic`, `causal`
+  * Section `Physical & economic allocation`
+    * Field `Product`: name of the co-/product
+    * Field `Category`: category of the co-/product
+    * Field `Physical`: physical allocation factor of that co-/product
+    * Field `Economic`: economic allocation factor of that co-/product
+  * Section `Causal allocation`
+    * Field `Flow`: the name of the allocated flows
+    * Field `Category`: the category of the allocated flow
+    * Field `Direction`: the direction of the flow in the process
+    * Field `Amount`: amount of the allocated flow in the process (just for information)
+    * product column `i`: the respective allocation factors for the flow
+      related to the co-/product `i`
+
+* Sheet `Parameters`
+  * Section `Global input parameters`
+    * Field `Name`: the parameter name (must be a valid name that can appear in
+      formulas)
+    * Field `Value`: the parameter value
+    * Field `Uncertainty`: uncertainty distribution of the parameter; same
+      format as for inputs and outputs above
+    * Field `(G)Mean | Mode`
+    * Field `SD | GSD`
+    * Field `Minimum`
+    * Field `Maximum`
+    * Field `Description`
+  * Section `Global calculated parameters`
+    * Field `Name`
+    * Field `Formula`:
+    * Field `Description`
+  * Section `Input parameters`: input parameters of the process; same fields as
+    for global input parameters
+  * Section `Calculated parameters`: calculated / dependent parameters of the
+    process; same fields as for global calculated parameters above
+
+* Sheet `Flows`
+  * Field `UUID`
+  * Field `Name`
+  * Field `Category`
+  * Field `Description`
+  * Field `Version`
+  * Field `Last change`
+  * Field `Tags`
+  * Field `Type`:
+  * Field `CAS`:
+  * Field `Formula`:
+  * Field `Location`:
+  * Field `Reference flow property`:
+
+* Sheet `Flow properties`
+  * Field `UUID`
+  * Field `Name`
+  * Field `Category`
+  * Field `Description`
+  * Field `Version`
+  * Field `Last change`
+  * Field `Tags`
+  * Field `Type`:
+  * Field `Unit group`:
+
+* Sheet `Flow property factors`: this sheet is only required when there are
+  multiple flow properties of a flow
+  * Field `Flow`
+  * Field `Category`
+  * Field `Flow property`
+  * Field `Conversion factor`:
+
+* Sheet `Unit groups`
+  * Field `UUID`
+  * Field `Name`
+  * Field `Category`
+  * Field `Description`
+  * Field `Version`
+  * Field `Last change`
+  * Field `Tags`
+  * Field `Reference unit`:
+  * Field `Default flow property`:
+
+* Sheet `Units`
+  * Field `UUID`
+  * Field `Name`
+  * Field `Description`
+  * Field `Unit group`:
+  * Field `Synonyms`:
+  * Field `Conversion factor`:
+
+* Sheet `Locations`
+  * Field `UUID`
+  * Field `Name`
+  * Field `Category`
+  * Field `Description`
+  * Field `Version`
+  * Field `Last change`
+  * Field `Tags`
+  * Field `Code`:
+  * Field `Latitude`:
+  * Field `Longitude`:
+
+* Sheet `Actors`
+  * Field `UUID`
+  * Field `Name`
+  * Field `Category`
+  * Field `Description`
+  * Field `Version`
+  * Field `Last change`
+  * Field `Tags`
+  * Field `Address`:
+  * Field `City`:
+  * Field `Zip code`:
+  * Field `Country`:
+  * Field `E-Mail`:
+  * Field `Telefax`:
+  * Field `Telephone`:
+  * Field `Website`:
+
+* Sheet `Sources`
+  * Field `UUID`
+  * Field `Name`
+  * Field `Category`
+  * Field `Description`
+  * Field `Version`
+  * Field `Last change`
+  * Field `Tags`
+  * Field `Text reference`:
+  * Field `URL`:
+  * Field `Year`:
+
+* Sheet `Providers`
+  * Field `UUID`
+  * Field `Name`
+  * Field `Category`
+  * Field `Location`
