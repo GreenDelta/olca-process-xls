@@ -114,8 +114,8 @@ class InMetaDataSync {
 		doc.reviewDetails = review.str(Field.REVIEW_DETAILS);
 
 		doc.sources.clear();
-		sheet.eachRow(Section.SOURCES, row -> {
-			var name = In.stringOf(row.cell(0));
+		sheet.eachRowObject(Section.SOURCES, row -> {
+			var name = In.stringOf(In.cell(row, 0));
 			var source = config.index().get(Source.class, name);
 			if (source != null) {
 				doc.sources.add(source);

@@ -8,16 +8,16 @@ import org.junit.Test;
 import org.openlca.core.database.IDatabase;
 import org.openlca.core.model.Category;
 import org.openlca.core.model.Flow;
-import org.openlca.core.model.FlowProperty;
 import org.openlca.core.model.Location;
 import org.openlca.core.model.ModelType;
 import org.openlca.core.model.Process;
 import org.openlca.core.model.ProcessDocumentation;
-import org.openlca.core.model.UnitGroup;
+import org.openlca.core.model.Source;
 import org.openlca.core.model.store.InMemoryStore;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.stream.Collectors;
 
 public class BaseTest {
 
@@ -27,12 +27,12 @@ public class BaseTest {
 
 	@Before
 	public void setup() throws IOException {
-		var units = UnitGroup.of("Mass units", "kg");
-		var mass = FlowProperty.of("Mass", units);
+		var store = InMemoryStore.create();
+		var mass = Tests.createMass(store);
 		var p = Flow.product("p", mass);
 
 		origin = Process.of("P", p);
-		origin.documentation = new ProcessDocumentation();
+		var doc = origin.documentation = new ProcessDocumentation();
 		var root = Category.of("some", ModelType.PROCESS);
 		origin.category = Category.childOf(root, "category");
 
@@ -40,15 +40,26 @@ public class BaseTest {
 		origin.location = location;
 		origin.documentation.geography = "about geography";
 
+		var source1 = Source.of("Source 1");
+		var source2 = Source.of("Source 2");
+		doc.sources.add(source1);
+		doc.sources.add(source2);
+		doc.publication = source1;
+
+		doc.dataCollectionPeriod = "dataCollectionPeriod";
+		doc.completeness = "completeness";
+		doc.inventoryMethod = "inventoryMethod";
+		doc.dataTreatment = "dataTreatment";
+
 		// write and read
-		var store = InMemoryStore.create();
-		store.insert(units, mass, p, location, origin);
+		store.insert(source1, source2, p, location, origin);
 		var file = Files.createTempFile("_olca_", ".xlsx");
 		XlsProcessWriter.of(store)
 			.write(origin, file.toFile());
 		synced = XlsProcessReader.of(db)
 			.sync(file.toFile())
 			.orElseThrow();
+		// System.out.println(file);
 		Files.delete(file);
 	}
 
@@ -67,7 +78,11 @@ public class BaseTest {
 
 	@Test
 	public void testQuantRef() {
-		assertEquals("p", synced.quantitativeReference.flow.name);
+		var qref = synced.quantitativeReference;
+		assertEquals(1, qref.amount, 1e-17);
+		assertEquals("p", qref.flow.name);
+		assertEquals("kg", qref.unit.name);
+		assertEquals("Mass", qref.flowPropertyFactor.flowProperty.name);
 	}
 
 	@Test
@@ -77,5 +92,15 @@ public class BaseTest {
 		assertEquals("Aruba", loc.name);
 		assertEquals("AW", loc.code);
 		assertEquals("about geography", synced.documentation.geography);
+	}
+
+	@Test
+	public void testSources() {
+		var sources = synced.documentation.sources
+			.stream()
+			.map(s -> s.name)
+			.toList();
+		assertTrue(sources.contains("Source 1"));
+		assertTrue(sources.contains("Source 2"));
 	}
 }
