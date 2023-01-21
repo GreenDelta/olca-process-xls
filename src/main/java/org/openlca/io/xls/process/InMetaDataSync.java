@@ -132,7 +132,7 @@ class InMetaDataSync {
 		doc.dataSetOwner = section.get(Field.DATA_SET_OWNER, config, Actor.class);
 		doc.dataGenerator =section.get(Field.DATA_GENERATOR, config, Actor.class);
 		doc.dataDocumentor = section.get(Field.DATA_DOCUMENTOR, config, Actor.class);
-		doc.publication = section.get(Field.PUBLICATION, config, Source.class);;
+		doc.publication = section.get(Field.PUBLICATION, config, Source.class);
 		doc.restrictions = section.str(Field.ACCESS_RESTRICTIONS);
 		doc.project = section.str(Field.PROJECT);
 		doc.creationDate = section.date(Field.CREATION_DATE);

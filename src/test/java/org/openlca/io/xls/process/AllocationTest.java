@@ -14,7 +14,6 @@ import org.openlca.core.model.Flow;
 import org.openlca.core.model.Process;
 import org.openlca.core.model.store.InMemoryStore;
 
-import java.io.IOException;
 import java.util.List;
 
 public class AllocationTest {

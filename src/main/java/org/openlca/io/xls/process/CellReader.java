@@ -1,6 +1,5 @@
 package org.openlca.io.xls.process;
 
-import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Cell;
 import org.openlca.core.database.CategoryDao;
 import org.openlca.core.database.IDatabase;

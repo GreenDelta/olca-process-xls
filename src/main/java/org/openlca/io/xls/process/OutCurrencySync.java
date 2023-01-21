@@ -20,6 +20,9 @@ class OutCurrencySync implements OutEntitySync {
 	public void visit(RootEntity entity) {
 		if (entity instanceof Currency c) {
 			currencies.add(c);
+			if (c.referenceCurrency != null) {
+				currencies.add(c.referenceCurrency);
+			}
 		}
 	}
 

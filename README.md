@@ -1,7 +1,8 @@
 # openLCA Excel format for process data sets
 
 This repository contains the openLCA import and export logic for process data
-sets stored in Excel files.
+sets stored in Excel files. It can be also used as a stand-alone module (see
+[this example](src/test/java/org/openlca/io/xls/process/Example.java)).
 
 ## Principles
 

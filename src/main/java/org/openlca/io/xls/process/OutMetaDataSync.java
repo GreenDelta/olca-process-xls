@@ -32,7 +32,8 @@ class OutMetaDataSync {
 	}
 
 	private void writeInfoSheet() {
-		var sheet = config.createSheet(Tab.GENERAL_INFO);
+		var sheet = config.createSheet(Tab.GENERAL_INFO)
+			.withColumnWidths(2, 40);
 
 		sheet.next(Section.GENERAL_INFO)
 			.next(Field.UUID, process.refId)
@@ -70,8 +71,9 @@ class OutMetaDataSync {
 	}
 
 	private void writeAdminSheet() {
-		var sheet = config.createSheet(Tab.ADMINISTRATIVE_INFORMATION);
-		sheet.next(Section.ADMINISTRATIVE_INFO)
+		config.createSheet(Tab.ADMINISTRATIVE_INFORMATION)
+			.withColumnWidths(2, 40)
+			.next(Section.ADMINISTRATIVE_INFO)
 			.next(Field.INTENDED_APPLICATION, doc.intendedApplication)
 			.next(Field.DATA_SET_OWNER, doc.dataSetOwner)
 			.next(Field.DATA_GENERATOR, doc.dataGenerator)
@@ -84,7 +86,8 @@ class OutMetaDataSync {
 	}
 
 	private void writeModellingSheet() {
-		var sheet = config.createSheet(Tab.MODELING_AND_VALIDATION);
+		var sheet = config.createSheet(Tab.MODELING_AND_VALIDATION)
+			.withColumnWidths(2, 40);
 
 		sheet.next(Section.MODELING_AND_VALIDATION)
 			.next(Field.PROCESS_TYPE, process.processType == ProcessType.LCI_RESULT
