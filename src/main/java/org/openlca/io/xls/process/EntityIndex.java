@@ -4,6 +4,7 @@ import org.openlca.core.database.Daos;
 import org.openlca.core.database.FlowDao;
 import org.openlca.core.database.IDatabase;
 import org.openlca.core.io.ImportLog;
+import org.openlca.core.model.Currency;
 import org.openlca.core.model.Flow;
 import org.openlca.core.model.Location;
 import org.openlca.core.model.RootEntity;
@@ -110,6 +111,11 @@ class EntityIndex {
 			if (e instanceof Location loc) {
 				if (Strings.notEmpty(loc.code)) {
 					map.put(keyOf(loc.code), loc);
+				}
+			}
+			if (e instanceof Currency currency) {
+				if (Strings.notEmpty(currency.code)) {
+					map.put(keyOf(currency.code), currency);
 				}
 			}
 		}

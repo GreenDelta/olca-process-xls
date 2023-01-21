@@ -149,6 +149,7 @@ public class XlsProcessReader {
 		InActorSync.sync(config);
 		InSourceSync.sync(config);
 		InUnitSync.sync(config);
+		InCurrencySync.sync(config);
 		InLocationSync.sync(config);
 		InFlowSync.sync(config);
 		InProviderSync.sync(config);

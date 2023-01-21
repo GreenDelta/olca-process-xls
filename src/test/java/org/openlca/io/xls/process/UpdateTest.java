@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openlca.core.database.IDatabase;
 import org.openlca.core.model.Category;
+import org.openlca.core.model.Currency;
 import org.openlca.core.model.DQSystem;
 import org.openlca.core.model.Flow;
 import org.openlca.core.model.FlowProperty;
@@ -59,6 +60,23 @@ public class UpdateTest {
 		assertEquals(synced.dqSystem, schema);
 		assertEquals(synced.exchangeDqSystem, schema);
 		assertEquals(synced.socialDqSystem, schema);
+	}
+
+	@Test
+	public void testUpdateCosts() {
+
+		var currency = Currency.of("EUR");
+		currency.referenceCurrency = currency;
+		db.insert(currency);
+
+		var qref = process.quantitativeReference;
+		qref.currency = currency;
+		qref.costs = 42.0;
+
+		var synced = sync(UpdateMode.ALWAYS);
+		qref = synced.quantitativeReference;
+		assertEquals(qref.currency, currency);
+		assertEquals(qref.costs, 42.0, 1e-17);
 	}
 
 	@Test

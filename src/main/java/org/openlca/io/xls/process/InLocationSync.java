@@ -8,7 +8,7 @@ class InLocationSync {
 	private final InConfig config;
 	private final SheetReader sheet;
 
-	InLocationSync(InConfig config, SheetReader sheet) {
+	private InLocationSync(InConfig config, SheetReader sheet) {
 		this.config = config;
 		this.sheet = sheet;
 	}
