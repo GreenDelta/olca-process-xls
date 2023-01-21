@@ -8,6 +8,7 @@ enum Tab {
 	ACTORS("Actors"),
 	ADMINISTRATIVE_INFORMATION("Administrative information"),
 	ALLOCATION("Allocation"),
+	CURRENCIES("Currencies"),
 	FLOW_PROPERTIES("Flow properties"),
 	FLOW_PROPERTY_FACTORS("Flow property factors"),
 	FLOWS("Flows"),

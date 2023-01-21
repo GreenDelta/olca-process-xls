@@ -27,6 +27,7 @@ class OutConfig {
 			new OutFlowPropertySync(this),
 			new OutUnitGroupSync(this),
 			new OutUnitSync(this),
+			new OutCurrencySync(this),
 			new OutLocationSync(this),
 			new OutActorSync(this),
 			new OutSourceSync(this),

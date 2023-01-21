@@ -8,11 +8,11 @@ import java.util.Set;
 
 class OutLocationSync implements OutEntitySync {
 
-	private final OutConfig wb;
+	private final OutConfig config;
 	private final Set<Location> locations = new HashSet<>();
 
-	OutLocationSync(OutConfig wb) {
-		this.wb = wb;
+	OutLocationSync(OutConfig config) {
+		this.config = config;
 	}
 
 	@Override
@@ -24,9 +24,9 @@ class OutLocationSync implements OutEntitySync {
 
 	@Override
 	public void flush() {
-		var cursor = wb.createSheet(Tab.LOCATIONS)
+		var sheet = config.createSheet(Tab.LOCATIONS)
 			.withColumnWidths(5, 25);
-		cursor.header(
+		sheet.header(
 			Field.UUID,
 			Field.CODE,
 			Field.NAME,
@@ -39,15 +39,16 @@ class OutLocationSync implements OutEntitySync {
 		);
 
 		for (var location : Out.sort(locations)) {
-			cursor.next(row -> row.next(location.refId)
-				.next(location.code)
-				.next(location.name)
-				.next(Out.pathOf(location))
-				.next(location.description)
-				.next(location.latitude)
-				.next(location.longitude)
-				.nextAsDate(location.lastChange)
-				.nextAsVersion(location.version));
+			sheet.next(row ->
+				row.next(location.refId)
+					.next(location.code)
+					.next(location.name)
+					.next(Out.pathOf(location))
+					.next(location.description)
+					.next(location.latitude)
+					.next(location.longitude)
+					.nextAsDate(location.lastChange)
+					.nextAsVersion(location.version));
 		}
 	}
 }
