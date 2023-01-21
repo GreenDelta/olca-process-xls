@@ -136,8 +136,8 @@ public class UpdateTest {
 				.withUpdates(mode)
 				.sync(file)
 				.orElseThrow();
-			System.out.println(file.getAbsolutePath());
-			// Files.delete(file.toPath());
+			// System.out.println(file.getAbsolutePath());
+			Files.delete(file.toPath());
 			return synced;
 		} catch (IOException e) {
 			throw new RuntimeException(e);
