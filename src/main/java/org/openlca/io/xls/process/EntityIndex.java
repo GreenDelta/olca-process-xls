@@ -5,11 +5,8 @@ import org.openlca.core.database.FlowDao;
 import org.openlca.core.database.IDatabase;
 import org.openlca.core.io.ImportLog;
 import org.openlca.core.model.Flow;
-import org.openlca.core.model.FlowProperty;
-import org.openlca.core.model.FlowPropertyFactor;
 import org.openlca.core.model.Location;
 import org.openlca.core.model.RootEntity;
-import org.openlca.core.model.Unit;
 import org.openlca.util.Strings;
 
 import java.util.HashMap;
@@ -23,6 +20,7 @@ class EntityIndex {
 
 	private final Map<Class<?>, Map<String, RootEntity>> index = new HashMap<>();
 	private final Map<String, Flow> flows = new HashMap<>();
+	private final Map<String, String> providerMap = new HashMap<>();
 
 	EntityIndex(IDatabase db, ImportLog log) {
 		this.db = db;
@@ -79,23 +77,14 @@ class EntityIndex {
 		return put(candidates.get(0));
 	}
 
-	FlowProperty flowPropertyOf(Flow flow, String unit) {
-		if (flow == null)
-			return null;
-		for (var f : flow.flowPropertyFactors) {
-			if (unitOf(f, unit) != null)
-				return f.flowProperty;
-		}
-		return null;
+	void addProvider(String name, String refId) {
+		providerMap.put(keyOf(name), refId);
 	}
 
-	Unit unitOf(FlowPropertyFactor f, String unit) {
-		if (f == null
-				|| Strings.nullOrEmpty(unit)
-				|| f.flowProperty == null
-				|| f.flowProperty.unitGroup == null)
-			return null;
-		return f.flowProperty.unitGroup.getUnit(unit);
+	String getProviderId(String name) {
+		return Strings.notEmpty(name)
+			? providerMap.get(keyOf(name))
+			: null;
 	}
 
 	<T extends RootEntity> T sync(Class<T> type, String refId, Supplier<T> fn) {

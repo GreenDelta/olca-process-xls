@@ -105,7 +105,11 @@ class InExchangeSync {
 		if (!Exchanges.isLinkable(e)) {
 			e.defaultProviderId = 0;
 		} else {
-			// TODO: link providers
+			var provider = row.str(Field.PROVIDER);
+			var providerId = config.index().getProviderId(provider);
+			if(Strings.notEmpty(providerId)) {
+				config.providers().add(providerId, e);
+			}
 		}
 
 		return true;

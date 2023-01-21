@@ -3,6 +3,7 @@ package org.openlca.io.xls.process;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.openlca.core.database.IDatabase;
+import org.openlca.core.io.ExchangeProviderQueue;
 import org.openlca.core.io.ImportLog;
 import org.openlca.core.model.Process;
 import org.openlca.core.model.ProcessDocumentation;
@@ -23,11 +24,13 @@ import java.util.Optional;
 public class XlsProcessReader {
 
 	private final IDatabase db;
+	private final ExchangeProviderQueue providers;
 	private final ImportLog log;
 	private UpdateMode updates = UpdateMode.NEVER;
 
 	private XlsProcessReader(IDatabase db) {
 		this.db = Objects.requireNonNull(db);
+		this.providers = ExchangeProviderQueue.create(db);
 		this.log = new ImportLog();
 	}
 
@@ -96,13 +99,14 @@ public class XlsProcessReader {
 
 			// sync sheets
 			var config = new InConfig(
-				this, wb, process, new EntityIndex(db, log), db, log);
+				this, wb, process, new EntityIndex(db, log), db, log, providers);
 			syncRefData(config);
 			syncProcessData(config);
 
 			var synced = process.id == 0
 				? db.insert(process)
 				: db.update(process);
+			providers.pop(synced);
 			return Optional.of(synced);
 		} catch (IOException e) {
 			throw new RuntimeException(
@@ -147,6 +151,7 @@ public class XlsProcessReader {
 		InUnitSync.sync(config);
 		InLocationSync.sync(config);
 		InFlowSync.sync(config);
+		InProviderSync.sync(config);
 	}
 
 	private void syncProcessData(InConfig config) {
