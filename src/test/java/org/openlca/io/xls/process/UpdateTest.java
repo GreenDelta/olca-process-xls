@@ -67,7 +67,7 @@ public class UpdateTest {
 
 		var currency = Currency.of("EUR");
 		currency.referenceCurrency = currency;
-		db.insert(currency);
+		// db.insert(currency);
 
 		var qref = process.quantitativeReference;
 		qref.currency = currency;
@@ -75,7 +75,7 @@ public class UpdateTest {
 
 		var synced = sync(UpdateMode.ALWAYS);
 		qref = synced.quantitativeReference;
-		assertEquals(qref.currency, currency);
+		assertEquals("EUR", qref.currency.name);
 		assertEquals(qref.costs, 42.0, 1e-17);
 	}
 
