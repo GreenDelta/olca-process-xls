@@ -7,12 +7,16 @@ import org.openlca.core.io.ImportLog;
 import org.openlca.core.model.Process;
 import org.openlca.core.model.ProcessDocumentation;
 import org.openlca.core.model.Version;
+import org.openlca.core.model.descriptors.Descriptor;
 import org.openlca.core.model.descriptors.ProcessDescriptor;
 import org.openlca.jsonld.input.UpdateMode;
 import org.openlca.util.Strings;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -40,6 +44,30 @@ public class XlsProcessReader {
 			this.updates = mode;
 		}
 		return this;
+	}
+
+	public List<ProcessDescriptor> syncAllFromFolder(File dir) {
+		return dir != null && dir.isDirectory()
+			? syncAll(dir.listFiles())
+			: Collections.emptyList();
+	}
+
+	public List<ProcessDescriptor> syncAll(File[] files) {
+		if (files == null)
+			return Collections.emptyList();
+		var synced = new ArrayList<ProcessDescriptor>();
+		for (var file : files) {
+			if (file == null)
+				continue;
+			var name = file.getName();
+			if (!name.toLowerCase().endsWith(".xlsx"))
+				continue;
+			var process = sync(file).orElse(null);
+			if (process == null)
+				continue;
+			synced.add(Descriptor.of(process));
+		}
+		return synced;
 	}
 
 	public Optional<Process> sync(File file) {
