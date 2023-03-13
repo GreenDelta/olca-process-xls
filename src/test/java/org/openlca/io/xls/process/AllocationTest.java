@@ -30,6 +30,7 @@ public class AllocationTest {
 		var e = Flow.elementary("e", mass);
 
 		var process = Process.of("P", p);
+		process.defaultAllocationMethod = AllocationMethod.ECONOMIC;
 		process.output(q, 1);
 		var elemOut = process.output(e, 1);
 		store.insert(p, q, e, process); // assigns IDs
@@ -54,12 +55,11 @@ public class AllocationTest {
 	@Test
 	public void testCalculate() {
 		for (var type : AllocationMethod.values()) {
-			if (type == AllocationMethod.NONE
-				|| type == AllocationMethod.USE_DEFAULT)
+			if (type == AllocationMethod.NONE)
 				continue;
 			double expected = switch (type) {
 				case PHYSICAL -> 0.2;
-				case ECONOMIC -> 0.7;
+				case ECONOMIC, USE_DEFAULT -> 0.7;
 				case CAUSAL -> 0.1;
 				default -> 1.0;
 			};
