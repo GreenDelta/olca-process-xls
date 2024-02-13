@@ -3,7 +3,7 @@ package org.openlca.io.xls.process;
 import java.util.Date;
 
 import org.openlca.core.model.Process;
-import org.openlca.core.model.ProcessDocumentation;
+import org.openlca.core.model.doc.ProcessDoc;
 import org.openlca.core.model.ProcessType;
 import org.openlca.core.model.Version;
 
@@ -11,13 +11,13 @@ class OutMetaDataSync {
 
 	private final OutConfig config;
 	private final Process process;
-	private final ProcessDocumentation doc;
+	private final ProcessDoc doc;
 
 	private OutMetaDataSync(OutConfig config) {
 		this.config = config;
 		this.process = config.process();
 		this.doc = process.documentation == null
-			? new ProcessDocumentation()
+			? new ProcessDoc()
 			: process.documentation;
 	}
 
@@ -75,11 +75,11 @@ class OutMetaDataSync {
 			.withColumnWidths(2, 40)
 			.next(Section.ADMINISTRATIVE_INFO)
 			.next(Field.INTENDED_APPLICATION, doc.intendedApplication)
-			.next(Field.DATA_SET_OWNER, doc.dataSetOwner)
+			.next(Field.DATA_SET_OWNER, doc.dataOwner)
 			.next(Field.DATA_GENERATOR, doc.dataGenerator)
 			.next(Field.DATA_DOCUMENTOR, doc.dataDocumentor)
 			.next(Field.PUBLICATION, doc.publication)
-			.next(Field.ACCESS_RESTRICTIONS, doc.restrictions)
+			.next(Field.ACCESS_RESTRICTIONS, doc.accessRestrictions)
 			.next(Field.PROJECT, doc.project)
 			.next(Field.CREATION_DATE, doc.creationDate)
 			.next(Field.COPYRIGHT, doc.copyright);
@@ -95,20 +95,23 @@ class OutMetaDataSync {
 				: "Unit process")
 			.next(Field.LCI_METHOD, doc.inventoryMethod)
 			.next(Field.MODELING_CONSTANTS, doc.modelingConstants)
-			.next(Field.DATA_COMPLETENESS, doc.completeness)
+			.next(Field.DATA_COMPLETENESS, doc.dataCompleteness)
 			.next(Field.DATA_SELECTION, doc.dataSelection)
 			.next(Field.DATA_TREATMENT, doc.dataTreatment)
 			.next();
 
 		sheet.next(Section.DATA_SOURCE_INFO)
-			.next(Field.SAMPLING_PROCEDURE, doc.sampling)
+			.next(Field.SAMPLING_PROCEDURE, doc.samplingProcedure)
 			.next(Field.DATA_COLLECTION_PERIOD, doc.dataCollectionPeriod)
 			.next();
 
+		/*
+		TODO write review sections
 		sheet.next(Section.REVIEW)
 			.next(Field.REVIEWER, doc.reviewer)
 			.next(Field.REVIEW_DETAILS, doc.reviewDetails)
 			.next();
+    */
 
 		sheet.next(Section.SOURCES);
 		for (var source : doc.sources) {

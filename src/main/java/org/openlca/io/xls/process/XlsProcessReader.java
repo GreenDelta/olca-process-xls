@@ -6,7 +6,7 @@ import org.openlca.core.database.IDatabase;
 import org.openlca.core.io.ExchangeProviderQueue;
 import org.openlca.core.io.ImportLog;
 import org.openlca.core.model.Process;
-import org.openlca.core.model.ProcessDocumentation;
+import org.openlca.core.model.doc.ProcessDoc;
 import org.openlca.core.model.Version;
 import org.openlca.core.model.descriptors.Descriptor;
 import org.openlca.core.model.descriptors.ProcessDescriptor;
@@ -94,7 +94,7 @@ public class XlsProcessReader {
 			process.name = info.name;
 			process.lastChange = info.lastChange;
 			if (process.documentation == null) {
-				process.documentation = new ProcessDocumentation();
+				process.documentation = new ProcessDoc();
 			}
 
 			// sync sheets

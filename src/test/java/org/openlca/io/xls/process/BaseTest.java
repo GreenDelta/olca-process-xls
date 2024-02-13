@@ -12,7 +12,7 @@ import org.openlca.core.model.Flow;
 import org.openlca.core.model.Location;
 import org.openlca.core.model.ModelType;
 import org.openlca.core.model.Process;
-import org.openlca.core.model.ProcessDocumentation;
+import org.openlca.core.model.doc.ProcessDoc;
 import org.openlca.core.model.Source;
 import org.openlca.core.model.store.InMemoryStore;
 
@@ -28,7 +28,7 @@ public class BaseTest {
 		var p = Flow.product("p", mass);
 
 		var process = Process.of("P", p);
-		var doc = process.documentation = new ProcessDocumentation();
+		var doc = process.documentation = new ProcessDoc();
 		var root = Category.of("some", ModelType.PROCESS);
 		process.category = Category.childOf(root, "category");
 
@@ -44,17 +44,17 @@ public class BaseTest {
 		doc.publication = source1;
 
 		doc.dataCollectionPeriod = "dataCollectionPeriod";
-		doc.completeness = "completeness";
+		doc.dataCompleteness = "completeness";
 		doc.inventoryMethod = "inventoryMethod";
 		doc.dataTreatment = "dataTreatment";
 		doc.dataSelection = "dataSelection";
 		doc.modelingConstants = "modelingConstants";
-		doc.sampling = "sampling";
+		doc.samplingProcedure = "sampling";
 
-		doc.reviewer = actor;
+		// doc.reviewer = actor;
 		doc.dataDocumentor = actor;
 		doc.dataGenerator = actor;
-		doc.dataSetOwner = actor;
+		doc.dataOwner = actor;
 
 		// write and read
 		store.insert(actor, source1, source2, p, location, process);
@@ -97,12 +97,12 @@ public class BaseTest {
 	public void testModelling() {
 		var doc = synced.documentation;
 		assertEquals("dataCollectionPeriod", doc.dataCollectionPeriod);
-		assertEquals("completeness", doc.completeness);
+		assertEquals("completeness", doc.dataCompleteness);
 		assertEquals("inventoryMethod", doc.inventoryMethod);
 		assertEquals("dataTreatment", doc.dataTreatment);
 		assertEquals("dataSelection", doc.dataSelection);
 		assertEquals("modelingConstants", doc.modelingConstants);
-		assertEquals("sampling", doc.sampling);
+		assertEquals("sampling", doc.samplingProcedure);
 	}
 
 	@Test
@@ -118,9 +118,10 @@ public class BaseTest {
 	@Test
 	public void testActor() {
 		var doc = synced.documentation;
-		assertEquals("Actor", doc.reviewer.name);
+		// assertEquals("Actor", doc.reviewer.name);
+
 		assertEquals("Actor", doc.dataDocumentor.name);
 		assertEquals("Actor", doc.dataGenerator.name);
-		assertEquals("Actor", doc.dataSetOwner.name);
+		assertEquals("Actor", doc.dataOwner.name);
 	}
 }

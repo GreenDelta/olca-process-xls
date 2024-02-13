@@ -14,7 +14,7 @@ import org.openlca.core.model.Flow;
 import org.openlca.core.model.FlowProperty;
 import org.openlca.core.model.ModelType;
 import org.openlca.core.model.Process;
-import org.openlca.core.model.ProcessDocumentation;
+import org.openlca.core.model.doc.ProcessDoc;
 import org.openlca.core.model.Uncertainty;
 import org.openlca.core.model.UncertaintyType;
 import org.openlca.core.model.Version;
@@ -32,14 +32,14 @@ public class UpdateTest {
 		var mass = Tests.createMass(db);
 		var p = Flow.product("p", mass);
 		process = Process.of("P", p);
-		process.documentation = new ProcessDocumentation();
+		process.documentation = new ProcessDoc();
 		var root = Category.of("some", ModelType.PROCESS);
 		process.category = Category.childOf(root, "category");
 		db.insert(p, root, process);
 	}
 
 	@After
-	public void teardown() {
+	public void cleanup() {
 		db.clear();
 	}
 

@@ -5,7 +5,7 @@ import org.openlca.core.model.DQSystem;
 import org.openlca.core.model.Location;
 import org.openlca.core.model.ModelType;
 import org.openlca.core.model.Process;
-import org.openlca.core.model.ProcessDocumentation;
+import org.openlca.core.model.doc.ProcessDoc;
 import org.openlca.core.model.ProcessType;
 import org.openlca.core.model.Source;
 
@@ -13,13 +13,13 @@ class InMetaDataSync {
 
 	private final InConfig config;
 	private final Process process;
-	private final ProcessDocumentation doc;
+	private final ProcessDoc doc;
 
 	private InMetaDataSync(InConfig config) {
 		this.config = config;
 		this.process = config.process();
 		if (process.documentation == null) {
-			process.documentation = new ProcessDocumentation();
+			process.documentation = new ProcessDoc();
 		}
 		this.doc = process.documentation;
 	}
@@ -101,17 +101,21 @@ class InMetaDataSync {
 		}
 		doc.inventoryMethod = modelling.str(Field.LCI_METHOD);
 		doc.modelingConstants = modelling.str(Field.MODELING_CONSTANTS);
-		doc.completeness = modelling.str(Field.DATA_COMPLETENESS);
+		doc.dataCompleteness = modelling.str(Field.DATA_COMPLETENESS);
 		doc.dataSelection = modelling.str(Field.DATA_SELECTION);
 		doc.dataTreatment = modelling.str(Field.DATA_TREATMENT);
 
 		var data = sheet.read(Section.DATA_SOURCE_INFO);
-		doc.sampling = data.str(Field.SAMPLING_PROCEDURE);
+		doc.samplingProcedure = data.str(Field.SAMPLING_PROCEDURE);
 		doc.dataCollectionPeriod = data.str(Field.DATA_COLLECTION_PERIOD);
 
+		/*
+
+		TODO: read review sections
 		var review = sheet.read(Section.REVIEW);
 		doc.reviewer = review.get(Field.REVIEWER, config, Actor.class);
 		doc.reviewDetails = review.str(Field.REVIEW_DETAILS);
+*/
 
 		doc.sources.clear();
 		sheet.eachRowObject(Section.SOURCES, row -> {
@@ -129,11 +133,11 @@ class InMetaDataSync {
 			return;
 		var section = sheet.read(Section.ADMINISTRATIVE_INFO);
 		doc.intendedApplication = section.str(Field.INTENDED_APPLICATION);
-		doc.dataSetOwner = section.get(Field.DATA_SET_OWNER, config, Actor.class);
+		doc.dataOwner = section.get(Field.DATA_SET_OWNER, config, Actor.class);
 		doc.dataGenerator =section.get(Field.DATA_GENERATOR, config, Actor.class);
 		doc.dataDocumentor = section.get(Field.DATA_DOCUMENTOR, config, Actor.class);
 		doc.publication = section.get(Field.PUBLICATION, config, Source.class);
-		doc.restrictions = section.str(Field.ACCESS_RESTRICTIONS);
+		doc.accessRestrictions = section.str(Field.ACCESS_RESTRICTIONS);
 		doc.project = section.str(Field.PROJECT);
 		doc.creationDate = section.date(Field.CREATION_DATE);
 		doc.copyright = section.bool(Field.COPYRIGHT);
