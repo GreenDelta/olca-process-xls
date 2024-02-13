@@ -6,16 +6,15 @@ package org.openlca.io.xls.process;
 enum Tab {
 
 	ACTORS("Actors"),
-	ADMINISTRATIVE_INFORMATION("Administrative information"),
 	ALLOCATION("Allocation"),
 	CURRENCIES("Currencies"),
+	DOCUMENTATION("Documentation"),
 	FLOW_PROPERTIES("Flow properties"),
 	FLOW_PROPERTY_FACTORS("Flow property factors"),
 	FLOWS("Flows"),
 	GENERAL_INFO("General information"),
 	INPUTS("Inputs"),
 	LOCATIONS("Locations"),
-	MODELING_AND_VALIDATION("Modeling and validation"),
 	OUTPUTS("Outputs"),
 	PARAMETERS("Parameters"),
 	PROVIDERS("Providers"),

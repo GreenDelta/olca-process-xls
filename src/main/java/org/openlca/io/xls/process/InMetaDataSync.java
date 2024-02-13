@@ -30,8 +30,7 @@ class InMetaDataSync {
 
 	private void sync() {
 		syncGeneralInfo();
-		syncModellingInfo();
-		syncAdminInfo();
+		syncDoc();
 	}
 
 	private void syncGeneralInfo() {
@@ -87,8 +86,8 @@ class InMetaDataSync {
 		}
 	}
 
-	private void syncModellingInfo() {
-		var sheet = config.getSheet(Tab.MODELING_AND_VALIDATION);
+	private void syncDoc() {
+		var sheet = config.getSheet(Tab.DOCUMENTATION);
 		if (sheet == null)
 			return;
 
@@ -109,6 +108,17 @@ class InMetaDataSync {
 		doc.samplingProcedure = data.str(Field.SAMPLING_PROCEDURE);
 		doc.dataCollectionPeriod = data.str(Field.DATA_COLLECTION_PERIOD);
 
+		var section = sheet.read(Section.ADMINISTRATIVE_INFO);
+		doc.intendedApplication = section.str(Field.INTENDED_APPLICATION);
+		doc.dataOwner = section.get(Field.DATA_SET_OWNER, config, Actor.class);
+		doc.dataGenerator =section.get(Field.DATA_GENERATOR, config, Actor.class);
+		doc.dataDocumentor = section.get(Field.DATA_DOCUMENTOR, config, Actor.class);
+		doc.publication = section.get(Field.PUBLICATION, config, Source.class);
+		doc.accessRestrictions = section.str(Field.ACCESS_RESTRICTIONS);
+		doc.project = section.str(Field.PROJECT);
+		doc.creationDate = section.date(Field.CREATION_DATE);
+		doc.copyright = section.bool(Field.COPYRIGHT);
+
 		/*
 
 		TODO: read review sections
@@ -127,19 +137,4 @@ class InMetaDataSync {
 		});
 	}
 
-	private void syncAdminInfo() {
-		var sheet = config.getSheet(Tab.ADMINISTRATIVE_INFORMATION);
-		if (sheet == null)
-			return;
-		var section = sheet.read(Section.ADMINISTRATIVE_INFO);
-		doc.intendedApplication = section.str(Field.INTENDED_APPLICATION);
-		doc.dataOwner = section.get(Field.DATA_SET_OWNER, config, Actor.class);
-		doc.dataGenerator =section.get(Field.DATA_GENERATOR, config, Actor.class);
-		doc.dataDocumentor = section.get(Field.DATA_DOCUMENTOR, config, Actor.class);
-		doc.publication = section.get(Field.PUBLICATION, config, Source.class);
-		doc.accessRestrictions = section.str(Field.ACCESS_RESTRICTIONS);
-		doc.project = section.str(Field.PROJECT);
-		doc.creationDate = section.date(Field.CREATION_DATE);
-		doc.copyright = section.bool(Field.COPYRIGHT);
-	}
 }

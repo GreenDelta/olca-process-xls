@@ -27,8 +27,7 @@ class OutMetaDataSync {
 
 	private void sync() {
 		writeInfoSheet();
-		writeModellingSheet();
-		writeAdminSheet();
+		writeDocSheet();
 	}
 
 	private void writeInfoSheet() {
@@ -70,23 +69,8 @@ class OutMetaDataSync {
 			.next();
 	}
 
-	private void writeAdminSheet() {
-		config.createSheet(Tab.ADMINISTRATIVE_INFORMATION)
-			.withColumnWidths(2, 40)
-			.next(Section.ADMINISTRATIVE_INFO)
-			.next(Field.INTENDED_APPLICATION, doc.intendedApplication)
-			.next(Field.DATA_SET_OWNER, doc.dataOwner)
-			.next(Field.DATA_GENERATOR, doc.dataGenerator)
-			.next(Field.DATA_DOCUMENTOR, doc.dataDocumentor)
-			.next(Field.PUBLICATION, doc.publication)
-			.next(Field.ACCESS_RESTRICTIONS, doc.accessRestrictions)
-			.next(Field.PROJECT, doc.project)
-			.next(Field.CREATION_DATE, doc.creationDate)
-			.next(Field.COPYRIGHT, doc.copyright);
-	}
-
-	private void writeModellingSheet() {
-		var sheet = config.createSheet(Tab.MODELING_AND_VALIDATION)
+	private void writeDocSheet() {
+		var sheet = config.createSheet(Tab.DOCUMENTATION)
 			.withColumnWidths(2, 40);
 
 		sheet.next(Section.MODELING_AND_VALIDATION)
@@ -117,6 +101,18 @@ class OutMetaDataSync {
 		for (var source : doc.sources) {
 			sheet.next(source);
 		}
+
+		sheet.next()
+			.next(Section.ADMINISTRATIVE_INFO)
+			.next(Field.INTENDED_APPLICATION, doc.intendedApplication)
+			.next(Field.DATA_SET_OWNER, doc.dataOwner)
+			.next(Field.DATA_GENERATOR, doc.dataGenerator)
+			.next(Field.DATA_DOCUMENTOR, doc.dataDocumentor)
+			.next(Field.PUBLICATION, doc.publication)
+			.next(Field.ACCESS_RESTRICTIONS, doc.accessRestrictions)
+			.next(Field.PROJECT, doc.project)
+			.next(Field.CREATION_DATE, doc.creationDate)
+			.next(Field.COPYRIGHT, doc.copyright);
 	}
 
 }
