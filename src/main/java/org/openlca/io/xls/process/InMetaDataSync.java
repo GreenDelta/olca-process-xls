@@ -8,6 +8,7 @@ import org.openlca.core.model.Process;
 import org.openlca.core.model.doc.ProcessDoc;
 import org.openlca.core.model.ProcessType;
 import org.openlca.core.model.Source;
+import org.openlca.util.Strings;
 
 class InMetaDataSync {
 
@@ -109,6 +110,16 @@ class InMetaDataSync {
 		doc.samplingProcedure = data.str(Field.SAMPLING_PROCEDURE);
 		doc.dataCollectionPeriod = data.str(Field.DATA_COLLECTION_PERIOD);
 		doc.useAdvice = data.str(Field.USE_ADVICE);
+
+		// flow completeness
+		doc.flowCompleteness.clear();
+		sheet.eachRowObject(Section.COMPLETENESS, row -> {
+			var key = In.stringOf(In.cell(row, 0));
+			var val = In.stringOf(In.cell(row, 1));
+			if (Strings.nullOrEmpty(key) || Strings.notEmpty(val))
+				return;
+			doc.flowCompleteness.put(key, val);
+		});
 
 		// sources
 		doc.sources.clear();

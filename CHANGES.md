@@ -11,3 +11,4 @@
   reviews; the section `Process evaluation and validation` in the tab
   `Modeling and validation` is moved to a review in the upgrade script
 + `Use advice` is supported as new field
++ new `Documentation > Completeness` section

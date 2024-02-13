@@ -90,6 +90,12 @@ class OutMetaDataSync {
 			.next(Field.USE_ADVICE, doc.useAdvice)
 			.next();
 
+		// flow completeness
+		sheet.next(Section.COMPLETENESS);
+		doc.flowCompleteness.forEach(
+			(key, val) -> sheet.next(row -> row.next(key).next(val)));
+		sheet.next();
+
 		/*
 		TODO write review sections
 		sheet.next(Section.REVIEW)
@@ -115,5 +121,4 @@ class OutMetaDataSync {
 			.next(Field.COPYRIGHT, doc.copyright)
 			.next(Field.ACCESS_RESTRICTIONS, doc.accessRestrictions);
 	}
-
 }

@@ -78,23 +78,22 @@ Below the possible sheets, sections, and fields are listed:
     * Field `Process schema`:
     * Field `Social schema`:
 
-* Sheet `Modeling and validation`
-  * Section `Modeling and validation`
+* Sheet `Documentation`
+  * Section `LCI method`
     * Field `Process type`:
     * Field `LCI method`:
     * Field `Modeling constants`:
+  * Section `Data source information`
     * Field `Data completeness`:
     * Field `Data selection`:
     * Field `Data treatment`:
-  * Section `Data source information`
     * Field `Data collection period`:
     * Field `Sampling procedure`:
-  * Section `Process evaluation and validation`
-    * Field `Review details`:
-    * Field `Reviewer`:
+    * Field `Use advice`:
+  * Section `Completeness`: flow completeness aspects
+    * each row under this section contains the aspect in the first column and
+      the completeness value in the second column
   * Section `Sources`
-
-* Sheet `Administrative information`
   * Section `Administrative information`
     * Field `Intended application`:
     * Field `Data set owner`:
