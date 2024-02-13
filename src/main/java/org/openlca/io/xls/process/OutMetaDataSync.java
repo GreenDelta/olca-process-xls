@@ -73,20 +73,21 @@ class OutMetaDataSync {
 		var sheet = config.createSheet(Tab.DOCUMENTATION)
 			.withColumnWidths(2, 40);
 
-		sheet.next(Section.MODELING_AND_VALIDATION)
+		sheet.next(Section.LCI_METHOD)
 			.next(Field.PROCESS_TYPE, process.processType == ProcessType.LCI_RESULT
 				? "LCI result"
 				: "Unit process")
 			.next(Field.LCI_METHOD, doc.inventoryMethod)
 			.next(Field.MODELING_CONSTANTS, doc.modelingConstants)
-			.next(Field.DATA_COMPLETENESS, doc.dataCompleteness)
-			.next(Field.DATA_SELECTION, doc.dataSelection)
-			.next(Field.DATA_TREATMENT, doc.dataTreatment)
 			.next();
 
 		sheet.next(Section.DATA_SOURCE_INFO)
+			.next(Field.DATA_COMPLETENESS, doc.dataCompleteness)
+			.next(Field.DATA_SELECTION, doc.dataSelection)
+			.next(Field.DATA_TREATMENT, doc.dataTreatment)
 			.next(Field.SAMPLING_PROCEDURE, doc.samplingProcedure)
 			.next(Field.DATA_COLLECTION_PERIOD, doc.dataCollectionPeriod)
+			.next(Field.USE_ADVICE, doc.useAdvice)
 			.next();
 
 		/*
@@ -104,15 +105,15 @@ class OutMetaDataSync {
 
 		sheet.next()
 			.next(Section.ADMINISTRATIVE_INFO)
+			.next(Field.PROJECT, doc.project)
 			.next(Field.INTENDED_APPLICATION, doc.intendedApplication)
 			.next(Field.DATA_SET_OWNER, doc.dataOwner)
 			.next(Field.DATA_GENERATOR, doc.dataGenerator)
 			.next(Field.DATA_DOCUMENTOR, doc.dataDocumentor)
 			.next(Field.PUBLICATION, doc.publication)
-			.next(Field.ACCESS_RESTRICTIONS, doc.accessRestrictions)
-			.next(Field.PROJECT, doc.project)
 			.next(Field.CREATION_DATE, doc.creationDate)
-			.next(Field.COPYRIGHT, doc.copyright);
+			.next(Field.COPYRIGHT, doc.copyright)
+			.next(Field.ACCESS_RESTRICTIONS, doc.accessRestrictions);
 	}
 
 }

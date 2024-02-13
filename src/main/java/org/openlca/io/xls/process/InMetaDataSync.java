@@ -91,33 +91,47 @@ class InMetaDataSync {
 		if (sheet == null)
 			return;
 
-		var modelling = sheet.read(Section.MODELING_AND_VALIDATION);
-		var type = modelling.str(Field.PROCESS_TYPE);
-		if (type != null && type.strip().equalsIgnoreCase("LCI result")) {
-			process.processType = ProcessType.LCI_RESULT;
-		} else {
-			process.processType = ProcessType.UNIT_PROCESS;
-		}
-		doc.inventoryMethod = modelling.str(Field.LCI_METHOD);
-		doc.modelingConstants = modelling.str(Field.MODELING_CONSTANTS);
-		doc.dataCompleteness = modelling.str(Field.DATA_COMPLETENESS);
-		doc.dataSelection = modelling.str(Field.DATA_SELECTION);
-		doc.dataTreatment = modelling.str(Field.DATA_TREATMENT);
+		// LCI method
+		var inventory = sheet.read(Section.LCI_METHOD);
+		var type = inventory.str(Field.PROCESS_TYPE);
+		process.processType =
+			type != null && type.strip().equalsIgnoreCase("LCI result")
+				? ProcessType.LCI_RESULT
+				: ProcessType.UNIT_PROCESS;
+		doc.inventoryMethod = inventory.str(Field.LCI_METHOD);
+		doc.modelingConstants = inventory.str(Field.MODELING_CONSTANTS);
 
+		// data source information
 		var data = sheet.read(Section.DATA_SOURCE_INFO);
+		doc.dataCompleteness = data.str(Field.DATA_COMPLETENESS);
+		doc.dataSelection = data.str(Field.DATA_SELECTION);
+		doc.dataTreatment = data.str(Field.DATA_TREATMENT);
 		doc.samplingProcedure = data.str(Field.SAMPLING_PROCEDURE);
 		doc.dataCollectionPeriod = data.str(Field.DATA_COLLECTION_PERIOD);
+		doc.useAdvice = data.str(Field.USE_ADVICE);
 
+		// sources
+		doc.sources.clear();
+		sheet.eachRowObject(Section.SOURCES, row -> {
+			var name = In.stringOf(In.cell(row, 0));
+			var source = config.index().get(Source.class, name);
+			if (source != null) {
+				doc.sources.add(source);
+			}
+		});
+
+		// administrative information
 		var section = sheet.read(Section.ADMINISTRATIVE_INFO);
+		doc.project = section.str(Field.PROJECT);
 		doc.intendedApplication = section.str(Field.INTENDED_APPLICATION);
 		doc.dataOwner = section.get(Field.DATA_SET_OWNER, config, Actor.class);
-		doc.dataGenerator =section.get(Field.DATA_GENERATOR, config, Actor.class);
+		doc.dataGenerator = section.get(Field.DATA_GENERATOR, config, Actor.class);
 		doc.dataDocumentor = section.get(Field.DATA_DOCUMENTOR, config, Actor.class);
 		doc.publication = section.get(Field.PUBLICATION, config, Source.class);
-		doc.accessRestrictions = section.str(Field.ACCESS_RESTRICTIONS);
-		doc.project = section.str(Field.PROJECT);
 		doc.creationDate = section.date(Field.CREATION_DATE);
 		doc.copyright = section.bool(Field.COPYRIGHT);
+		doc.accessRestrictions = section.str(Field.ACCESS_RESTRICTIONS);
+
 
 		/*
 
@@ -127,14 +141,7 @@ class InMetaDataSync {
 		doc.reviewDetails = review.str(Field.REVIEW_DETAILS);
 */
 
-		doc.sources.clear();
-		sheet.eachRowObject(Section.SOURCES, row -> {
-			var name = In.stringOf(In.cell(row, 0));
-			var source = config.index().get(Source.class, name);
-			if (source != null) {
-				doc.sources.add(source);
-			}
-		});
+
 	}
 
 }

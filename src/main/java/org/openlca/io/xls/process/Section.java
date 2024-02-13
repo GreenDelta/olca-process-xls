@@ -19,9 +19,9 @@ enum Section {
 	GLOBAL_CALCULATED_PARAMETERS("Global calculated parameters"),
 	GLOBAL_INPUT_PARAMETERS("Global input parameters"),
 	INPUT_PARAMETERS("Input parameters"),
-	MODELING_AND_VALIDATION("Modeling and validation"),
+	LCI_METHOD("LCI method"),
 	PHYSICAL_ECONOMIC_ALLOCATION("Physical & economic allocation"),
-	REVIEW("Process evaluation and validation"),
+	REVIEW("Review"),
 	SOURCES("Sources"),
 	TECHNOLOGY("Technology"),
 	TIME("Time");

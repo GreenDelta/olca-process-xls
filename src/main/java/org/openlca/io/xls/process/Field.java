@@ -57,6 +57,7 @@ enum Field {
 	UNIT("Unit"),
 	UNIT_GROUP("Unit group"),
 	URL("URL"),
+	USE_ADVICE("Use advice"),
 	UUID("UUID"),
 
 	VERSION("Version"),
