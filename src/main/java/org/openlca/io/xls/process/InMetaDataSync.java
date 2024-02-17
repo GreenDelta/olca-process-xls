@@ -116,7 +116,7 @@ class InMetaDataSync {
 		sheet.eachRowObject(Section.COMPLETENESS, row -> {
 			var key = In.stringOf(In.cell(row, 0));
 			var val = In.stringOf(In.cell(row, 1));
-			if (Strings.nullOrEmpty(key) || Strings.notEmpty(val))
+			if (Strings.nullOrEmpty(key) || Strings.nullOrEmpty(val))
 				return;
 			doc.flowCompleteness.put(key, val);
 		});

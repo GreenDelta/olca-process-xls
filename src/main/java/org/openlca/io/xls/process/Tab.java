@@ -18,6 +18,7 @@ enum Tab {
 	OUTPUTS("Outputs"),
 	PARAMETERS("Parameters"),
 	PROVIDERS("Providers"),
+	REVIEWS("Reviews"),
 	SOURCES("Sources"),
 	UNIT_GROUPS("Unit groups"),
 	UNITS("Units");

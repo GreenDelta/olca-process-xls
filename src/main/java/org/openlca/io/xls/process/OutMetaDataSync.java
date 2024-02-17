@@ -92,7 +92,7 @@ class OutMetaDataSync {
 
 		// flow completeness
 		sheet.next(Section.COMPLETENESS);
-		doc.flowCompleteness.forEach(
+		doc.flowCompleteness.each(
 			(key, val) -> sheet.next(row -> row.next(key).next(val)));
 		sheet.next();
 
@@ -121,4 +121,6 @@ class OutMetaDataSync {
 			.next(Field.COPYRIGHT, doc.copyright)
 			.next(Field.ACCESS_RESTRICTIONS, doc.accessRestrictions);
 	}
+
+
 }

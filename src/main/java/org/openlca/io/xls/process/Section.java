@@ -22,7 +22,12 @@ enum Section {
 	INPUT_PARAMETERS("Input parameters"),
 	LCI_METHOD("LCI method"),
 	PHYSICAL_ECONOMIC_ALLOCATION("Physical & economic allocation"),
+
+	QUALITY_ASSESSMENT("Quality assessment"),
 	REVIEW("Review"),
+	REVIEWERS("Reviewers"),
+	REVIEW_METHODS("Review methods"),
+
 	SOURCES("Sources"),
 	TECHNOLOGY("Technology"),
 	TIME("Time");

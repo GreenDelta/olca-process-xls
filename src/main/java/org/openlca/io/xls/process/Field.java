@@ -88,8 +88,11 @@ enum Field {
 	LCI_METHOD("LCI method"),
 	MODELING_CONSTANTS("Modeling constants"),
 	PROCESS_TYPE("Process type"),
+
+	REVIEW_TYPE("Review type"),
+	REVIEW_REPORT("Review report"),
 	REVIEW_DETAILS("Review details"),
-	REVIEWER("Reviewer"),
+
 	SAMPLING_PROCEDURE("Sampling procedure"),
 
 	DEFAULT_ALLOCATION_METHOD("Default allocation method"),
@@ -180,8 +183,11 @@ enum Field {
 			case "lci method" -> LCI_METHOD;
 			case "modeling constants" -> MODELING_CONSTANTS;
 			case "process type" -> PROCESS_TYPE;
+
+			case "review type" -> REVIEW_TYPE;
+			case "review report" -> REVIEW_REPORT;
 			case "review details" -> REVIEW_DETAILS;
-			case "reviewer" -> REVIEWER;
+
 			case "sampling procedure" -> SAMPLING_PROCEDURE;
 
 			case "default allocation method" -> DEFAULT_ALLOCATION_METHOD;
