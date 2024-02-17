@@ -53,7 +53,7 @@ class SheetReader {
 		while (iter.hasNext()) {
 			var row = iter.next();
 			var head = In.stringOf(row, 0);
-			if (matches(head, section)) {
+			if (section.matches(head)) {
 				start = row;
 				break;
 			}
@@ -84,11 +84,4 @@ class SheetReader {
 			}
 		});
 	}
-
-	private boolean matches(String fieldId, Section section) {
-		if (Strings.nullOrEmpty(fieldId))
-			return false;
-		return fieldId.trim().equalsIgnoreCase(section.header());
-	}
-
 }

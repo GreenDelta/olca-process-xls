@@ -210,4 +210,8 @@ enum Field {
 	public String toString() {
 		return label;
 	}
+
+	boolean matches(String s) {
+		return s != null && s.strip().equalsIgnoreCase(label);
+	}
 }

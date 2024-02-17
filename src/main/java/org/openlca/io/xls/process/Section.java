@@ -38,12 +38,16 @@ enum Section {
 		this.header = header;
 	}
 
-	public String header() {
+	String header() {
 		return header;
 	}
 
 	@Override
 	public String toString() {
 		return header;
+	}
+
+	boolean matches(String s) {
+		return s != null && s.strip().equalsIgnoreCase(header);
 	}
 }

@@ -52,12 +52,14 @@ class OutReviewSync {
 					sheet.next(row -> row.next(scope.name).next(method));
 				}
 			}
+			sheet.next();
 		}
 
 		if (!rev.assessment.isEmpty()) {
 			sheet.next(Section.QUALITY_ASSESSMENT);
 			rev.assessment.each(
 				(key, val) -> sheet.next(row -> row.next(key).next(val)));
+			sheet.next();
 		}
 	}
 
