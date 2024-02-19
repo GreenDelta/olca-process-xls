@@ -44,10 +44,11 @@ class OutConfig {
 	}
 
 	void write() {
-		OutMetaDataSync.sync(this);
+		OutInfoSync.sync(this);
 		OutExchangeSync.sync(this);
 		OutAllocationSync.sync(this);
 		OutParameterSync.sync(this);
+		OutDocSync.sync(this);
 		OutReviewSync.sync(this);
 		OutComplianceSync.sync(this);
 		for (var sheet : entitySheets) {
