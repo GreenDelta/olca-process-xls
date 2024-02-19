@@ -156,10 +156,11 @@ public class XlsProcessReader {
 	}
 
 	private void syncProcessData(InConfig config) {
-		InMetaDataSync.sync(config);
+		InInfoSync.sync(config);
 		InExchangeSync.sync(config);
 		InAllocationSync.sync(config);
 		InParameterSync.sync(config);
+		InDocSync.sync(config);
 		InReviewSync.sync(config);
 		InComplianceSync.sync(config);
 	}

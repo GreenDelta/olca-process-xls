@@ -10,5 +10,6 @@
 + a new tab `Reviews` contains structured information about possible multiple
   reviews; the section `Process evaluation and validation` in the tab
   `Modeling and validation` is moved to a review in the upgrade script
++ a new tab `Compliance declarations` was added
 + `Use advice` is supported as new field
 + new `Documentation > Completeness` section
