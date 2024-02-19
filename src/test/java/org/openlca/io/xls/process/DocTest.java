@@ -12,6 +12,7 @@ import org.openlca.core.model.FlowProperty;
 import org.openlca.core.model.Process;
 import org.openlca.core.model.Source;
 import org.openlca.core.model.UnitGroup;
+import org.openlca.core.model.doc.ComplianceDeclaration;
 import org.openlca.core.model.doc.ProcessDoc;
 import org.openlca.core.model.doc.Review;
 import org.openlca.core.model.doc.ReviewScope;
@@ -106,6 +107,33 @@ public class DocTest {
 		}
 
 		db.delete(synced);
+	}
+
+	@Test
+	public void testComplianceSync() {
+		for (int i = 0; i < 3; i++) {
+			var dec = new ComplianceDeclaration();
+			doc.complianceDeclarations.add(dec);
+			dec.system = source;
+			dec.comment = "compliance " + i;
+			dec.aspects.put("Overall compliance", "Fully compliant");
+			dec.aspects.put("Nomenclature", "Not relevant");
+		}
+
+		var synced = Tests.syncWithDb(process, db);
+
+		var decs = synced.documentation.complianceDeclarations;
+		assertEquals(3, decs.size());
+		for (int i = 0; i < decs.size(); i++) {
+			var dec = decs.get(i);
+			assertEquals(source, dec.system);
+			assertEquals("compliance " + i, dec.comment);
+			assertEquals(2, dec.aspects.size());
+			assertEquals("Fully compliant",
+				dec.aspects.get("Overall compliance"));
+			assertEquals("Not relevant",
+				dec.aspects.get("Nomenclature"));
+		}
 	}
 
 }

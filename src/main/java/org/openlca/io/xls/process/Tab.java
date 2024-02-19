@@ -7,6 +7,7 @@ enum Tab {
 
 	ACTORS("Actors"),
 	ALLOCATION("Allocation"),
+	COMPLIANCE_DECLARATIONS("Compliance declarations"),
 	CURRENCIES("Currencies"),
 	DOCUMENTATION("Documentation"),
 	FLOW_PROPERTIES("Flow properties"),

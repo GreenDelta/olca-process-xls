@@ -49,6 +49,7 @@ class OutConfig {
 		OutAllocationSync.sync(this);
 		OutParameterSync.sync(this);
 		OutReviewSync.sync(this);
+		OutComplianceSync.sync(this);
 		for (var sheet : entitySheets) {
 			sheet.flush();
 		}

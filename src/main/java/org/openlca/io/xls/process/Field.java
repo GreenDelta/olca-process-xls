@@ -11,6 +11,8 @@ enum Field {
 	CATEGORY("Category"),
 	CITY("City"),
 	CODE("Code"),
+	COMMENT("Comment"),
+	COMPLIANCE_SYSTEM("Compliance system"),
 	CONVERSION_FACTOR("Conversion factor"),
 	COSTS_REVENUES("Costs/Revenues"),
 	COUNTRY("Country"),

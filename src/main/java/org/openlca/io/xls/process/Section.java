@@ -10,9 +10,13 @@ package org.openlca.io.xls.process;
 enum Section {
 
 	ADMINISTRATIVE_INFO("Administrative information"),
+
 	CALCULATED_PARAMETERS("Calculated parameters"),
 	CAUSAL_ALLOCATION("Causal allocation"),
 	COMPLETENESS("Completeness"),
+	COMPLIANCE_DECLARATION("Compliance declaration"),
+	COMPLIANCE_DETAILS("Compliance details"),
+
 	DATA_QUALITY("Data quality"),
 	DATA_SOURCE_INFO("Data source information"),
 	GENERAL_INFO("General information"),
