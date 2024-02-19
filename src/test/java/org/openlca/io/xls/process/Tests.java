@@ -36,8 +36,8 @@ class Tests {
 			var file = Files.createTempFile("_olca_", ".xlsx").toFile();
 			XlsProcessWriter.of(store).write(process, file);
 			var synced = XlsProcessReader.of(db()).sync(file).orElseThrow();
-			// Files.delete(file.toPath());
-			System.out.println(file.getAbsolutePath());
+			Files.delete(file.toPath());
+			// System.out.println(file.getAbsolutePath());
 			return synced;
 		} catch (IOException e) {
 			throw new RuntimeException(e);

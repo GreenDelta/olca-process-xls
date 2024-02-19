@@ -161,5 +161,6 @@ public class XlsProcessReader {
 		InAllocationSync.sync(config);
 		InParameterSync.sync(config);
 		InReviewSync.sync(config);
+		InComplianceSync.sync(config);
 	}
 }
