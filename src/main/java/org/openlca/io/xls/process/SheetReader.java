@@ -4,6 +4,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.openlca.util.Strings;
 
+import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
@@ -17,6 +18,30 @@ class SheetReader {
 
 	Sheet sheetObject() {
 		return sheet;
+	}
+
+	/**
+	 * Iterates over a block of rows after the given header row. The block is
+	 * finished when the first {@code null} row is found; callers can of course
+	 * break the iteration earlier.
+	 */
+	Iterable<Row> eachBlockRowAfter(Row header) {
+		return () -> new Iterator<>() {
+
+			int i = header.getRowNum() + 1;
+
+			@Override
+			public boolean hasNext() {
+				return sheet.getRow(i) != null;
+			}
+
+			@Override
+			public Row next() {
+				var row = sheet.getRow(i);
+				i++;
+				return row;
+			}
+		};
 	}
 
 	void eachRow(Consumer<RowReader> fn) {

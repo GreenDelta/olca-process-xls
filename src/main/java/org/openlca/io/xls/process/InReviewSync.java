@@ -62,8 +62,7 @@ class InReviewSync {
 
 			// reviewers
 			if (Section.REVIEWERS.matches(head)) {
-				while (it.hasNext()) {
-					var iRow = it.next();
+				for (var iRow : sheet.eachBlockRowAfter(row)) {
 					var name = In.stringOf(iRow, 0);
 					if (Strings.nullOrEmpty(name))
 						break;
@@ -78,8 +77,7 @@ class InReviewSync {
 
 			// scopes
 			if (Section.REVIEW_METHODS.matches(head)) {
-				while (it.hasNext()) {
-					var iRow = it.next();
+				for (var iRow : sheet.eachBlockRowAfter(row)) {
 					var name = In.stringOf(iRow, 0);
 					if (Strings.nullOrEmpty(name))
 						break;
@@ -94,8 +92,7 @@ class InReviewSync {
 
 			// quality assessment
 			if (Section.QUALITY_ASSESSMENT.matches(head)) {
-				while (it.hasNext()) {
-					var iRow = it.next();
+				for (var iRow : sheet.eachBlockRowAfter(row)) {
 					var aspect = In.stringOf(iRow, 0);
 					if (Strings.nullOrEmpty(aspect))
 						break;
@@ -104,7 +101,6 @@ class InReviewSync {
 						review.assessment.put(aspect, value);
 					}
 				}
-				continue;
 			}
 		}
 	}

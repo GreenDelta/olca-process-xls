@@ -31,7 +31,7 @@ public class DocTest {
 		var p = Flow.product("p", mass);
 		actor = Actor.of("actor");
 		source = Source.of("source");
-		db.insert(units, mass, p);
+		db.insert(units, mass, p, actor, source);
 		process = Process.of("P", p);
 		doc = process.documentation = new ProcessDoc();
 	}
@@ -87,16 +87,20 @@ public class DocTest {
 			assertEquals("some review method", rev.type);
 			assertEquals("details " + i, rev.details);
 			assertEquals(source, rev.report);
-			assertEquals(actor, rev.reviewers.get(1));
+			assertEquals(actor, rev.reviewers.get(0));
 
+			assertEquals(rev.scopes.size(), 2);
 			var docScope = rev.scopes.get("Documentation");
+			assertEquals(2, docScope.methods.size());
 			assertTrue(docScope.methods.contains("Reading"));
 			assertTrue(docScope.methods.contains("Spell checking"));
 
 			var calScope = rev.scopes.get("Flow amounts");
+			assertEquals(2, calScope.methods.size());
 			assertTrue(calScope.methods.contains("Mass balance"));
 			assertTrue(calScope.methods.contains("Energy balance"));
 
+			assertEquals(2, rev.assessment.size());
 			assertEquals("Very good", rev.assessment.get("Documentation"));
 			assertEquals("Good", rev.assessment.get("Data quality"));
 		}
